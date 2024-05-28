@@ -1,165 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="jemdoc.css" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xin-Qiang Cai @ MSLAB, UTokyo</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             line-height: 1.6;
-        }
-
-        h1, h2 {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
             color: #333;
-            transition: all 0.3s ease;
         }
 
-        h1:hover, h2:hover {
-            transform: scale(1.05);
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
         }
 
-        a {
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .profile {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile img {
+            border-radius: 8px;
+            width: 230px;
+            height: 290px;
+        }
+
+        .profile-info {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .profile-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+            font-family: "Kaiti", serif;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+        }
+
+        .profile-info a {
             color: #007bff;
             text-decoration: none;
         }
 
-        a:hover {
-            color: #0056b3;
+        .profile-info a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section p, .section ul {
+            margin: 10px 0;
+        }
+
+        .section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .section a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .section a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .profile {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-info {
+                margin: 20px 0 0 0;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
+
 <body>
-<div id="layout-content">
-<div id="toptitle">
-<h1>Xin-Qiang Cai @ MSLAB, UTokyo</h1>
-</div>
-<table class="imgtable"><tr><td>
-<a href=""><img src="./images/caixq.JPG" alt="caixq.JPG" width="230px" height="290px" /></a>&nbsp;</td>
-<td align="left"><p><b><font size="+4" face="STKaiti">蔡 欣 强</font></b><br />
-<font size="+2">Xin-Qiang Cai</font> </font><br />
-Ph.D. Student, <a href="http://www.ms.k.u-tokyo.ac.jp/index.html">Sugiyama-Yokoya-Ishida Lab</a><br />
-<a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html">Department of Complexity Science and Engineering</a> <br />
-<a href="https://www.k.u-tokyo.ac.jp/index.html.en">Graduate School of Frontier Sciences</a> <br />
-<a href="https://www.u-tokyo.ac.jp/en/">The University of Tokyo</a>, Tokyo, Japan<br /><br />
-Supervisor: Professor <a href="http://www.ms.k.u-tokyo.ac.jp/sugi/index.html" target="_blank"> Masashi Sugiyama</a> <br /><br />
-Email:cai@ms.k.u-tokyo.ac.jp, jkrsndivide@gmail.com<br />
-Laboratory: Department of Complexity Science and Engineering, Graduate School of Frontier Sciences (<a href="http://www.ms.k.u-tokyo.ac.jp/access.html#Kashiwa" target="_blank">Kashiwa campus</a>)</p>
-</td>
-<td valign="top" width="179"><p align="center"><a href="https://www.u-tokyo.ac.jp/en/" target="_blank"><img height="149" src="./images/utokyo.jfif" width="150" border="0" align="top"></a></p>
-<!-- <p align="center"><a href="https://www.u-tokyo.ac.jp/en/" target="_blank"><img height="120" src="./images/utokyo.jfif" width="100" border="0"></a></p> -->
-</td></tr></table>
-<h2>Biography</h2>
-<p>Currently I am a third year Ph.D. student of <a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html" target="_blank">Department of Complexity Science and Engineering</a> in <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">The University of Tokyo</a> and a member of <a href="http://www.ms.k.u-tokyo.ac.jp/" target="_blank">Sugiyama-Yokoya-Ishida Lab</a>. Also, I am working as a research assistant on <a href="https://beyondai.jp/" target="_blank">Beyond AI Institution</a>.</p><br>
-<p>I got my M.Sc. degree in <a href="https://www.nju.edu.cn/en/7f/6b/c7136a163691/page.psp" target="_blank">Computer Science and Technology</a> in June 2021 from <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> as a member of <a href="http://www.lamda.nju.edu.cn/" target="_blank">LAMDA</a> Group, supervised by professor <a href="https://cs.nju.edu.cn/zhouzh/" target="_blank">Zhi-Hua 
-Zhou</a> and professor <a href="http://www.lamda.nju.edu.cn/jiangy/" target="_blank">Yuan Jiang.</a></p><br>
-<p>I got my B.Sc. degree in <a href="http://hangkong.nwpu.edu.cn//" target="_blank">Aircraft Design and Engineering</a> in June 2018 from <a href="https://www.nwpu.edu.cn/" target="_blank">Northwestern Polytechnical University</a>. In the same year, I was admitted to study for a M.Sc degree in <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> without entrance examination.</p><br>
-<h2>Research Interests</h2>
-Currently I am focusing on the subfields:<br>
-<ul><li><b>Class Incremental Learning</b>: classification problems with emerging new classes;</li></ul>
-<ul><li><b>Reinforcement Learning & Imitation Learning</b>: learning a sequential-decision-making agent from the environment and/or demonstrations;</li></ul>
-<ul><li><b>Learning with Weak Supervision</b>: learning a model from noisy, limited, or imprecise sources.</li></ul><br>
+    <header>
+        <h1>Xin-Qiang Cai @ MSLAB, UTokyo</h1>
+    </header>
+    <main>
+        <div class="profile">
+            <img src="./images/caixq.JPG" alt="Xin-Qiang Cai">
+            <div class="profile-info">
+                <h2>蔡 欣 强</h2>
+                <p><strong>Xin-Qiang Cai</strong></p>
+                <p>Ph.D. Student, <a href="http://www.ms.k.u-tokyo.ac.jp/index.html">Sugiyama-Yokoya-Ishida Lab</a></p>
+                <p><a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html">Department of Complexity Science and Engineering</a></p>
+                <p><a href="https://www.k.u-tokyo.ac.jp/index.html.en">Graduate School of Frontier Sciences</a></p>
+                <p><a href="https://www.u-tokyo.ac.jp/en/">The University of Tokyo</a>, Tokyo, Japan</p>
+                <p>Supervisor: Professor <a href="http://www.ms.k.u-tokyo.ac.jp/sugi/index.html" target="_blank">Masashi Sugiyama</a></p>
+                <p>Email: cai@ms.k.u-tokyo.ac.jp, jkrsndivide@gmail.com</p>
+                <p>Laboratory: <a href="http://www.ms.k.u-tokyo.ac.jp/access.html#Kashiwa" target="_blank">Kashiwa campus</a></p>
+            </div>
+            <!-- <div>
+                <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">
+                    <img src="./images/utokyo.jfif" alt="University of Tokyo" style="width: 150px; height: auto; border-radius: 8px;">
+                </a>
+            </div> -->
+        </div>
 
+        <div class="section">
+            <h2>Biography</h2>
+            <p>Currently I am a third year Ph.D. student of <a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html" target="_blank">Department of Complexity Science and Engineering</a> in <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">The University of Tokyo</a> and a member of <a href="http://www.ms.k.u-tokyo.ac.jp/" target="_blank">Sugiyama-Yokoya-Ishida Lab</a>. Also, I am working as a research assistant on <a href="https://beyondai.jp/" target="_blank">Beyond AI Institution</a>.</p>
+            <p>I got my M.Sc. degree in <a href="https://www.nju.edu.cn/en/7f/6b/c7136a163691/page.psp" target="_blank">Computer Science and Technology</a> in June 2021 from <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> as a member of <a href="http://www.lamda.nju.edu.cn/" target="_blank">LAMDA</a> Group, supervised by professor <a href="https://cs.nju.edu.cn/zhouzh/" target="_blank">Zhi-Hua Zhou</a> and professor <a href="http://www.lamda.nju.edu.cn/jiangy/" target="_blank">Yuan Jiang</a>.</p>
+            <p>I got my B.Sc. degree in <a href="http://hangkong.nwpu.edu.cn//" target="_blank">Aircraft Design and Engineering</a> in June 2018 from <a href="https://www.nwpu.edu.cn/" target="_blank">Northwestern Polytechnical University</a>. In the same year, I was admitted to study for a M.Sc degree in <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> without entrance examination.</p>
+        </div>
 
-<h2>Preprint (* denotes equal contributions)</h2>
-<p>Yuting Tang*, <b>Xin-Qiang Cai*</b>, Yao-Xiang Ding, Qiyu Wu, Guoqing Liu, Masashi Sugiyama. Reinforcement Learning from Bagged Reward: A Transformer-based Approach for Instance-Level Reward Redistribution. In: Arxiv. [<a href="https://arxiv.org/abs/2402.03771">arxiv</a>] </p>
-<p>Soichiro Nishimori, <b>Xin-Qiang Cai</b>, Johannes Ackermann, Masashi Sugiyama. Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains. In: Arxiv. [<a href="https://arxiv.org/abs/2404.07465">arxiv</a>] </p>
-<p>Xingyu Song, Zhan Li, Shi Chen, <b>Xin-Qiang Cai</b>, Kazuyuki Demachi. An Animation-based Augmentation Approach for Action Recognition from Discontinuous Video. In: Arxiv. [<a href="https://arxiv.org/abs/2404.06741">arxiv</a>] </p>
-<ul>
-</ul><br>
+        <div class="section">
+            <h2>Research Interests</h2>
+            <ul>
+                <li><b>Class Incremental Learning</b>: classification problems with emerging new classes;</li>
+                <li><b>Reinforcement Learning & Imitation Learning</b>: learning a sequential-decision-making agent from the environment and/or demonstrations;</li>
+                <li><b>Learning with Weak Supervision</b>: learning a model from noisy, limited, or imprecise sources.</li>
+            </ul>
+        </div>
 
-<h2>Publication (* denotes equal contributions)</h2>
-<p>Kaiyan Zhao, Qiyu Wu, <b>Xin-Qiang Cai</b>, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. In: <b>Proceedings of the 8th Conference of the European Chapter of the Association for Computational Linguistics (EACL'24)</b>, Malta, Mar. 17-22, 2024. To appear. [<a href="https://arxiv.org/abs/2309.08929">arxiv</a>] </p>
-<p>Pushi Zhang*, Baiting Zhu*, <b>Xin-Qiang Cai*</b>, Li Zhao, Masashi Sugiyama, Jiang Bian. IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, <a href="https://www.robot-learning.ml/2023/">6th Robot Learning Workshop</a>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/IG-neurips23.pdf">paper</a>] [<a href=https://openreview.net/forum?id=SjNlIHY8db>openreview</a>] </p>
-<p><b>Xin-Qiang Cai</b>, Yu-Jie Zhang, Chao-Kai Chiang, Masashi Sugiyama. Imitation Learning from Vague Feedback. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/VPIL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-VPIL.html">bibtex</a>] </p>
-<p><b>Xin-Qiang Cai</b>, Pushi Zhang, Li Zhao, Jiang Bian, Masashi Sugiyama, Ashley Juan Llorens. Distributional Pareto-Optimal Multi-Objective Reinforcement Learning. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/DPMORL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-DPMORL.html">bibtex</a>] </p>
-<p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Zi-Xuan Chen, Yuan Jiang, Masashi Sugiyama, Zhi-Hua Zhou. Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning. In: <b>Proceedings of the Eleventh International Conference on Learning Representations (ICLR'23) (spotlight)</b>, Kigali, Rwanda, May 1-5, 2023. [<a href="https://openreview.net/forum?id=3ULaIHxn9u7">openreview</a>] [<a href="./files/HOIL-iclr23.pdf">paper</a>] [<a href="./bib/2023-ICLR-HOIL.html">bibtex</a>] </p>
-<p> Zi-Xuan Chen*, <b>Xin-Qiang Cai*</b>, Yuan Jiang, Zhi-Hua Zhou. Anomaly Guided Policy Learning from Imperfect Demonstrations. In: <b>Proceedings of the 21th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'22) (oral)</b>, Auckland, New Zealand, May 9-13, 2022. Page: 244-252. [<a href="./files/AGPO-aamas22.pdf">paper</a>] [<a href="./bib/2022-AAMAS-AGPO.html">bibtex</a>] </p>
-<p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Yuan Jiang, Zhi-Hua Zhou. Imitation Learning from Pixel-Level Demonstrations by HashReward. In: <b>Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'21) (oral)</b>, online, May 3-7, 2021. Page: 279–287. [<a href="http://www.lamda.nju.edu.cn/code_HashReward.ashx">code</a>] [<a href="./files/hashreward-aamas21.pdf">paper</a>] [<a href="./bib/2021-AAMAS-HashReward.html">bibtex</a>]  </p>
-<p><b>Xin-Qiang Cai</b>, Peng Zhao, Kai Ming Ting, Xin Mu, Yuan Jiang. Nearest Neighbor Ensembles: An Effective Method for Difficult Problems in Streaming Classification with Emerging New Classes. In: <b>Proceedings of the 19th IEEE International Conference on Data Mining (ICDM'19)</b>, Beijing, China, Nov. 8-11, 2019. Page: 970-975. [<a href="./files/SENNE_code.zip">code</a>] [<a href="./files/SENNE.pdf">paper</a>] [<a href="./bib/2019-ICDM-SENNE.html">bibtex</a>] </p>
-<ul>
-</ul><br>
+        <div class="section">
+            <h2>Preprint (* denotes equal contributions)</h2>
+            <p>Yuting Tang*, <b>Xin-Qiang Cai*</b>, Yao-Xiang Ding, Qiyu Wu, Guoqing Liu, Masashi Sugiyama. Reinforcement Learning from Bagged Reward: A Transformer-based Approach for Instance-Level Reward Redistribution. In: Arxiv. [<a href="https://arxiv.org/abs/2402.03771">arxiv</a>]</p>
+            <p>Soichiro Nishimori, <b>Xin-Qiang Cai</b>, Johannes Ackermann, Masashi Sugiyama. Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains. In: Arxiv. [<a href="https://arxiv.org/abs/2404.07465">arxiv</a>]</p>
+            <p>Xingyu Song, Zhan Li, Shi Chen, <b>Xin-Qiang Cai</b>, Kazuyuki Demachi. An Animation-based Augmentation Approach for Action Recognition from Discontinuous Video. In: Arxiv. [<a href="https://arxiv.org/abs/2404.06741">arxiv</a>]</p>
+        </div>
 
-<h2>Patent</h2>
-<ul><li>一种摄像器材记录的视频图像数据的高维模仿学习方法. Patent No. 202011450396.1, 2020.</li> </ul>
+        <div class="section">
+            <h2>Publication (* denotes equal contributions)</h2>
+            <p>Kaiyan Zhao, Qiyu Wu, <b>Xin-Qiang Cai</b>, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. In: <b>Proceedings of the 8th Conference of the European Chapter of the Association for Computational Linguistics (EACL'24)</b>, Malta, Mar. 17-22, 2024. To appear. [<a href="https://arxiv.org/abs/2309.08929">arxiv</a>]</p>
+            <p>Pushi Zhang*, Baiting Zhu*, <b>Xin-Qiang Cai*</b>, Li Zhao, Masashi Sugiyama, Jiang Bian. IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, <a href="https://www.robot-learning.ml/2023/">6th Robot Learning Workshop</a>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/IG-neurips23.pdf">paper</a>] [<a href="https://openreview.net/forum?id=SjNlIHY8db">openreview</a>]</p>
+            <p><b>Xin-Qiang Cai</b>, Yu-Jie Zhang, Chao-Kai Chiang, Masashi Sugiyama. Imitation Learning from Vague Feedback. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/VPIL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-VPIL.html">bibtex</a>]</p>
+            <p><b>Xin-Qiang Cai</b>, Pushi Zhang, Li Zhao, Jiang Bian, Masashi Sugiyama, Ashley Juan Llorens. Distributional Pareto-Optimal Multi-Objective Reinforcement Learning. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/DPMORL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-DPMORL.html">bibtex</a>]</p>
+            <p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Zi-Xuan Chen, Yuan Jiang, Masashi Sugiyama, Zhi-Hua Zhou. Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning. In: <b>Proceedings of the Eleventh International Conference on Learning Representations (ICLR'23) (spotlight)</b>, Kigali, Rwanda, May 1-5, 2023. [<a href="https://openreview.net/forum?id=3ULaIHxn9u7">openreview</a>] [<a href="./files/HOIL-iclr23.pdf">paper</a>] [<a href="./bib/2023-ICLR-HOIL.html">bibtex</a>]</p>
+            <p>Zi-Xuan Chen*, <b>Xin-Qiang Cai*</b>, Yuan Jiang, Zhi-Hua Zhou. Anomaly Guided Policy Learning from Imperfect Demonstrations. In: <b>Proceedings of the 21th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'22) (oral)</b>, Auckland, New Zealand, May 9-13, 2022. Page: 244-252. [<a href="./files/AGPO-aamas22.pdf">paper</a>] [<a href="./bib/2022-AAMAS-AGPO.html">bibtex</a>]</p>
+            <p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Yuan Jiang, Zhi-Hua Zhou. Imitation Learning from Pixel-Level Demonstrations by HashReward. In: <b>Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'21) (oral)</b>, online, May 3-7, 2021. Page: 279–287. [<a href="http://www.lamda.nju.edu.cn/code_HashReward.ashx">code</a>] [<a href="./files/hashreward-aamas21.pdf">paper</a>] [<a href="./bib/2021-AAMAS-HashReward.html">bibtex</a>]</p>
+            <p><b>Xin-Qiang Cai</b>, Peng Zhao, Kai Ming Ting, Xin Mu, Yuan Jiang. Nearest Neighbor Ensembles: An Effective Method for Difficult Problems in Streaming Classification with Emerging New Classes. In: <b>Proceedings of the 19th IEEE International Conference on Data Mining (ICDM'19)</b>, Beijing, China, Nov. 8-11, 2019. Page: 970-975. [<a href="./files/SENNE_code.zip">code</a>] [<a href="./files/SENNE.pdf">paper</a>] [<a href="./bib/2019-ICDM-SENNE.html">bibtex</a>]</p>
+        </div>
 
-<h2>Service</h2>
-Conference
-<ul>
-    <li>ICML 2024</li>
-    <li>ICLR 2024</li>
-    <li>ICLR 2023</li>
-	<li>NeurIPS 2023</li>
-	<li>ICML 2023</li>
-	<li>IJCAI 2023</li>
-	<li>SDM 2023</li>
-	<li>NeurIPS 2022</li>
-	<li>UAI 2022</li>
-	<li>ICML 2022</li>
-	<li>IJCAI 2022</li>
-	<li>CCML 2021</li>
-	<li>IJCAI 2021</li>
-	<li>ECAI 2020</li> 
-	<li>CIKM 2020</li>
-</ul>
-Journal
-<ul><li><a href="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385" target="_blank">IEEE Transactions on Neural Networks and Learning Systems(TNNLS)</a></li> 
-</ul> <br>
+        <div class="section">
+            <h2>Patent</h2>
+            <ul>
+                <li>一种摄像器材记录的视频图像数据的高维模仿学习方法. Patent No. 202011450396.1, 2020.</li>
+            </ul>
+        </div>
 
-<h2>Awards & Honors</h2>
-<ul><p>
-<li>Star of Tomorrow Award. Microsoft Research Asia (MSRA). 2024<br />
-<li><a href="https://www.jsps.go.jp/" target="_blank">Japan Society for the Promotion of Science (JSPS, 日本学術振興会) DC2 Fellowship</a>. 2023<br />
-<li>MSRA Collaborative Research Program Fellowship (D-CORE 2022). 2022<br />
-<li><a href="https://spring-gx-appl.adm.s.u-tokyo.ac.jp/en/" target="_blank">SPRING GX Fellowship</a>. 2021<br />
-<li>Excellent Graduate of Nanjing University. 2021<br />
-<li>AAMAS 2021 Attendance Scholarship. 2020<br />
-<li>Excellent Graduate Student of Nanjing University. 2019<br />
-<li>YeePay Scholarship of Nanjing University, Second Prize. 2019<br />
-<li><a href="http://icdm2019.bigke.org/" target="_blank">ICDM Student Travel Award</a>. 2019<br />
-<li><a href="https://grawww.nju.edu.cn/9a/a6/c905a301734/page.psp" target="_blank">Yingcai Scholarship of Nanjing University</a>, Second Prize. 2018<br />
-<li>Nanjing University Academic Scholarship, First Prize. 2018&2019&2020<br />
-<li>ZhongAn Hackathon Contest, AI scenario, First Prize. 2018<br />
-<li>Excellent Graduate of Northwestern Polytechnical University. 2018<br />
-<li>China Collegiate Computer Contest, First Prize. 2017<br />
-<li>The ACM-ICPC Asia Regional Contest, Qingdao Site 2017, Silver Medal. 2017<br />
-<li>The ACM-ICPC Asia Regional Contest, Xinjiang Site 2017, Bronze Medal. 2017<br />
-<li>Interdisciplinary Contest in Modeling, Honorable Mention. 2017<br />
-<li>China Collegiate Computer Contest, First Prize. 2017<br />
-<li>Interdisciplinary Contest in Modeling, Honorable Mention. 2016<br />
-<li>Contemporary Undergraduate Mathematical Contest in Modeling, Third Prize. 2016<br />
-<li>China Collegiate Programming Contest, Hangzhou Site 2016, Silver Medal. 2016<br />
-<li>China Collegiate Computer Contest, First Prize. 2016<br />
-<li>The ACM-ICPC Asia Regional Contest, Xi’an Site 2016, Bronze Medal. 2016<br />
-<li>The ACM-ICPC Asia Regional Contest, Shanghai Site 2016, Bronze Medal. 2016<br />
-<li>The ACM-ICPC Asia Regional Contest, China-Final, Bronze Medal. 2015<br />
-<li>Contemporary Undergraduate Mathematical Contest in Modeling, Second Prize. 2015<br />
-<li>The ACM-ICPC Asia Regional Contest, Shaanxi Provincial Contest, Silver Medal. 2015<br />
-<li>National Scholarship. 2015-2016<br />
-<li>National Scholarship. 2014-2015<br />
-<p></ul>
+        <div class="section">
+            <h2>Service</h2>
+            <h3>Conference</h3>
+            <ul>
+                <li>ICML 2024</li>
+                <li>ICLR 2024</li>
+                <li>ICLR 2023</li>
+                <li>NeurIPS 2023</li>
+                <li>ICML 2023</li>
+                <li>IJCAI 2023</li>
+                <li>SDM 2023</li>
+                <li>NeurIPS 2022</li>
+                <li>UAI 2022</li>
+                <li>ICML 2022</li>
+                <li>IJCAI 2022</li>
+                <li>CCML 2021</li>
+                <li>IJCAI 2021</li>
+                <li>ECAI 2020</li>
+                <li>CIKM 2020</li>
+            </ul>
+            <h3>Journal</h3>
+            <ul>
+                <li><a href="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385" target="_blank">IEEE Transactions on Neural Networks and Learning Systems(TNNLS)</a></li>
+            </ul>
+        </div>
 
-<h2>Correspondence</h2>
-<p>Email:
-cai@ms.k.u-tokyo.ac.jp, jkrsndivide@gmail.com<br /><br />
-<!-- Office:
-Room 327, Computer Science Building, Xianlin Campus of Nanjing University<br /><br />
-Address:
-Xin-Qiang Cai, National Key Laboratory for Novel Software Technology, Nanjing University, Xianlin Campus Mailbox 603, 163 Xianlin Avenue, Qixia District, Nanjing 210023, China<br />
-(南京市栖霞区仙林大道163号, 南京大学仙林校区603信箱, 软件新技术国家重点实验室, 210023.) -->
-</p>
-<p>
-<div style="text-align: center; width: 500px; border: green solid 1px;">
-<script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=5bXAoRB4OKq0H7x9gjoak2nIVgoe7W3-FxkfKTuzxOY&cl=ffffff&w=a"></script>
-</div> 
-</p>
-<div id="footer">
-<div id="footer-text">
-Page generated 2021-10-10 12:22:08 CST, by <a href="http://jemdoc.jaboc.net/">jemdoc</a>.
-(<a href="index.jemdoc">source</a>)
-</div>
-</div>
-</div>
+        <div class="section">
+            <h2>Awards & Honors</h2>
+            <ul>
+                <li>Star of Tomorrow Award. Microsoft Research Asia (MSRA). 2024</li>
+                <li><a href="https://www.jsps.go.jp/" target="_blank">Japan Society for the Promotion of Science (JSPS, 日本学術振興会) DC2 Fellowship</a>. 2023</li>
+                <li>MSRA Collaborative Research Program Fellowship (D-CORE 2022). 2022</li>
+                <li><a href="https://spring-gx-appl.adm.s.u-tokyo.ac.jp/en/" target="_blank">SPRING GX Fellowship</a>. 2021</li>
+                <li>Excellent Graduate of Nanjing University. 2021</li>
+                <li>AAMAS 2021 Attendance Scholarship. 2020</li>
+                <li>Excellent Graduate Student of Nanjing University. 2019</li>
+                <li>YeePay Scholarship of Nanjing University, Second Prize. 2019</li>
+                <li><a href="http://icdm2019.bigke.org/" target="_blank">ICDM Student Travel Award</a>. 2019</li>
+                <li><a href="https://grawww.nju.edu.cn/9a/a6/c905a301734/page.psp" target="_blank">Yingcai Scholarship of Nanjing University</a>, Second Prize. 2018</li>
+                <li>Nanjing University Academic Scholarship, First Prize. 2018&2019&2020</li>
+                <li>ZhongAn Hackathon Contest, AI scenario, First Prize. 2018</li>
+                <li>Excellent Graduate of Northwestern Polytechnical University. 2018</li>
+                <li>China Collegiate Computer Contest, First Prize. 2017</li>
+                <li>The ACM-ICPC Asia Regional Contest, Qingdao Site 2017, Silver Medal. 2017</li>
+                <li>The ACM-ICPC Asia Regional Contest, Xinjiang Site 2017, Bronze Medal. 2017</li>
+                <li>Interdisciplinary Contest in Modeling, Honorable Mention. 2017</li>
+                <li>China Collegiate Computer Contest, First Prize. 2017</li>
+                <li>Interdisciplinary Contest in Modeling, Honorable Mention. 2016</li>
+                <li>Contemporary Undergraduate Mathematical Contest in Modeling, Third Prize. 2016</li>
+                <li>China Collegiate Programming Contest, Hangzhou Site 2016, Silver Medal. 2016</li>
+                <li>China Collegiate Computer Contest, First Prize. 2016</li>
+                <li>The ACM-ICPC Asia Regional Contest, Xi’an Site 2016, Bronze Medal. 2016</li>
+                <li>The ACM-ICPC Asia Regional Contest, Shanghai Site 2016, Bronze Medal. 2016</li>
+                <li>The ACM-ICPC Asia Regional Contest, China-Final, Bronze Medal. 2015</li>
+                <li>Contemporary Undergraduate Mathematical Contest in Modeling, Second Prize. 2015</li>
+                <li>The ACM-ICPC Asia Regional Contest, Shaanxi Provincial Contest, Silver Medal. 2015</li>
+                <li>National Scholarship. 2015-2016</li>
+                <li>National Scholarship. 2014-2015</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Correspondence</h2>
+            <p>Email: cai@ms.k.u-tokyo.ac.jp, jkrsndivide@gmail.com</p>
+        </div>
+    </main>
+    <!-- <footer>
+        Page generated 2021-10-10 12:22:08 CST, by <a href="http://jemdoc.jaboc.net/" style="color: #fff;">jemdoc</a>.
+        (<a href="index.jemdoc" style="color: #fff;">source</a>)
+    </footer> -->
 </body>
+
 </html>
