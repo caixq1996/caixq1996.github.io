@@ -126,6 +126,64 @@
                 font-size: 2em;
             }
         }
+        .password-container {
+        text-align: center;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .password-container h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .password-container input {
+        padding: 10px;
+        font-size: 1em;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .password-container button {
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .password-container button:hover {
+        background-color: #0056b3;
+    }
+
+    .nutrition-tracker {
+        display: none;
+        width: 100%;
+        height: 100vh; /* 让高度占满整个视窗 */
+        position: absolute; /* 确保它能脱离文档流并覆盖全屏 */
+        top: 0;
+        left: 0;
+    }
+
+    .button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+    }
     </style>
 </head>
 
@@ -142,7 +200,9 @@
                 <p>Postdoctoral Researcher,</p> <p><a href="https://aip.riken.jp/labs/generic_tech/imperfect_inf_learn/"> Imperfect Information Learning Team</a>,</p>
                 <p><a href="https://aip.riken.jp/">RIKEN Center for Advanced Intelligence Project</a></p>
                 <p>[<a href="https://scholar.google.com/citations?hl=en&user=rtMUMooAAAAJ&view_op=list_works&gmla=ALUCkoXDtLBYZLV5MJOftJkHn-eBzh9vUFmU-eFvtizTEQpodfuHUzP01oZ0O8HCKk1SSzgNi2ehuvAezXKWd3R_fFvHx6-xZTwetjvxB39oArQmsikz5HhW483de8VDOm8YQQNjue53tPdZSizlNb3aCUk">Google Scholar</a>, <a href="https://dblp.org/pid/248/8034.html">dblp</a>]</p>
-                <p><b>Email</b>: xinqiang.cai [at] riken.jp</p> <p> (alternative: jkrsndivide [at] gmail.com)</p>
+                <p><b>Email</b>: xinqiang.cai [at] riken.jp</p> <p>(alternative: jkrsndivide [at] gmail.com)
+    <button onclick="location.href='./nutrition.html'" class="button">Nutrition Tracker</button>
+</p>
             </div>
             <!-- <div>
                 <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">

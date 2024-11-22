@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Tracker - Password Protected</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .password-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-container h1 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .password-container input {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .password-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .password-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .nutrition-tracker {
+            display: none;
+            width: 100%;
+            height: 100vh; /* Fullscreen height */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="password-container" id="password-container">
+        <h1>Nutrition Tracker</h1>
+        <p>Enter the password to access the tracker:</p>
+        <input type="password" id="password" placeholder="Enter password" />
+        <button onclick="checkPassword()">Submit</button>
+        <p id="error" style="color: red; display: none;">Incorrect password. Please try again.</p>
+    </div>
+
+    <div id="nutrition-tracker" class="nutrition-tracker">
+        <iframe src="./nutrition-tracker.html" width="100%" height="100%" style="border: none;"></iframe>
+    </div>
+
+    <script>
+        const PASSWORD = "c8177595"; // Set your password here
+        const STORAGE_KEY = "nutrition_tracker_authenticated";
+
+        // Check if the device is already authenticated
+        function checkAuthentication() {
+            const isAuthenticated = localStorage.getItem(STORAGE_KEY);
+            if (isAuthenticated === "true") {
+                showTracker();
+            }
+        }
+
+        // Show the nutrition tracker
+        function showTracker() {
+            const passwordContainer = document.getElementById("password-container");
+            const tracker = document.getElementById("nutrition-tracker");
+            passwordContainer.style.display = "none";
+            tracker.style.display = "block";
+        }
+
+        // Check password and authenticate the device
+        function checkPassword() {
+            const inputPassword = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error");
+
+            if (inputPassword === PASSWORD) {
+                // Store authentication in local storage
+                localStorage.setItem(STORAGE_KEY, "true");
+                showTracker();
+            } else {
+                errorMessage.style.display = "block";
+            }
+        }
+
+        // Check authentication on page load
+        window.onload = checkAuthentication;
+    </script>
+</body>
+
+</html>
