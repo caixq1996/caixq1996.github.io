@@ -1,309 +1,185 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xin-Qiang Cai | RIKEN AIP</title>
+  <title>Xin-Qiang Cai @ RIKEN-AIP, Tokyo, Japan</title>
   <style>
-    /* 
-      方案F: 现代科技蓝 (Modern Tech Blue)
-      - 主色调 (Primary): #005f73
-      - 强调色 (Accent): #0a9396
-      - 背景色 (Background): #f8f9fa
-      - 标题文字 (Title Text): #001219
-      - 正文文字 (Body Text): #343a40
+    /*
+      Previously used color schemes:
+
+      Scheme C (Lavender Purple):
+      - Primary: #9b59b6
+      - Accent: #8e44ad
+      - Background: #fcfcfc
+      - Title Text: #4a2975
+      - Body Text: #4f4f4f
+
+      Scheme D (Deep Red):
+      - Primary: #b71c1c
+      - Accent: #c0392b
+      - Background: #fffafa
+      - Title Text: #4a0505
+      - Body Text: #333
     */
 
-    #data-widget {
-      /* 【Key Change】 Use absolute positioning to scroll with the page */
-      position: absolute;
-      top: 150px; /* Initial vertical position, will be updated by JS */
-      
-      /* Horizontal positioning will be set by JS to stay outside the content */
-      
-      padding: 15px;
-      max-width: 250px;
-      z-index: 1001;
-      
-      background-color: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      
-      color: #343a40;
-      font-size: 14px;
-      line-height: 1.6;
-
-      /* We keep the transition for the initial fade-in */
-      transition: opacity 0.5s ease-in-out;
-      opacity: 0;
-    }
-
-    #data-widget.loaded {
-      opacity: 1;
-    }
-
-    #data-widget strong {
-      color: #005f73;
-    }
-
-    #data-widget .blessing-message {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(0, 95, 115, 0.2);
-      font-style: italic;
-      font-size: 13px;
-      color: #555;
-    }
+    /* 
+      Scheme E: Deep Blue with high-tech vibe
+      - Primary (Deep Blue): #0a3d62
+      - Accent (Bright Blue): #1e90ff
+      - Background: #f0faff
+      - Title Text (Dark Navy): #021f3f
+      - Body Text (Dark Gray): #333
+    */
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      line-height: 1.7;
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
       margin: 0;
       padding: 0;
-      /* 
-        【关键修改 #1】: 删除这里的 background-color 属性。
-        让body本身变透明，这样才能露出它后面的canvas。
-      */
-      color: #343a40;             /* 正文文字 */
-      scroll-behavior: smooth;
+      background-color: #f0faff;  /* Background */
+      color: #333;                /* Body text */
     }
 
-    #interactive-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1; /* 将canvas置于最底层 */
-    }
-
-    /* 头部 */
     header {
-      background-color: #001219; /* 使用更深的标题文字色作为页头背景，更显沉稳 */
-      color: #f8f9fa;
-      padding: 1.5rem 0;
+      background-color: #0a3d62;  /* Primary color */
+      color: #f0faff;            /* header text color */
+      padding: 10px 0;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.2em;
-      font-weight: 600;
+      font-size: 2.5em;
     }
 
-    /* 主体内容 */
     main {
-      padding: 20px 15px;
+      padding: 10px;
       max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .nav-buttons {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      max-width: 1000px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 5px;
-      /* 【毛玻璃效果】 */
-      background-color: rgba(255, 255, 255, 0.65); /* 半透明背景 */
-      backdrop-filter: blur(12px);                 /* 模糊背景 */
-      -webkit-backdrop-filter: blur(12px);         /* 兼容Safari */
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-
-    /* 个人信息卡片 */
-    .profile, .section {
-      margin-bottom: 20px;
-      padding: 25px;
-      /* 【关键修改】将alpha值从0.75降到0.7，增加通透感 */
-      background-color: rgba(255, 255, 255, 0.7); 
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin: auto;
     }
 
     .profile {
       display: flex;
       flex-wrap: wrap;
-      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
     .profile img {
-      border-radius: 10px;
-      width: 220px;
-      height: 280px;
-      object-fit: cover;
-      margin-right: 25px;
+      border-radius: 8px;
+      width: 230px;
+      height: 290px;
     }
-
     .profile-info {
       flex: 1;
+      margin-left: 10px;
     }
-
     .profile-info h2 {
       margin: 0 0 10px 0;
-      font-size: 2.5em; /* 增大中文名尺寸 */
-      font-family: "Kaiti", "STKaiti", "华文楷体", serif;
-      color: #001219; /* 标题文字 */
-      border-bottom: none; /* 个人信息中的标题不需要下划线 */
+      font-size: 1.8em;
+      font-family: "Kaiti", serif;
+      color: #021f3f; /* Title Text */
     }
-
     .profile-info p {
-      margin: 5px 0;
-      font-size: 1.05em;
+      margin: 3px 0;
     }
-
     .profile-info a {
-      color: #005f73; /* 主色调 */
+      color: #0a3d62;  /* Use Primary color */
       text-decoration: none;
-      font-weight: 500;
     }
-
     .profile-info a:hover {
-      color: #0a9396; /* 强调色 */
       text-decoration: underline;
     }
 
-    /* 导航按钮 */
-    .nav-buttons {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      max-width: 1000px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 5px;
-      background-color: rgba(248, 249, 250, 0.85); /* 半透明背景 */
-      backdrop-filter: blur(8px); /* 毛玻璃效果 */
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-buttons .button {
-      flex: 1;
-      background-color: transparent;
-      border: none;
-      color: #343a40;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 0 4px;
-      transition: all 0.3s ease;
-      font-size: 1em;
-      font-weight: 500;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .nav-buttons .button:hover, .nav-buttons .button:focus {
-      background-color: #005f73; /* 主色调 */
-      color: #ffffff;
-      transform: translateY(-2px);
-    }
-    
-    /* 内容区域 */
-    .section {
-      background-color: #ffffff;
-      padding: 25px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      border: 1px solid #dee2e6;
-    }
-    
-    .section h2 {
-      color: #001219; /* 标题文字 */
-      border-bottom: 3px solid #005f73; /* 主色调下划线 */
-      padding-bottom: 10px;
+    h2 {
+      color: #021f3f;  /* Title text */
+      border-bottom: 2px solid #021f3f;
+      padding-bottom: 5px;
       margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 1.6em;
     }
 
-    .section p, .section ul {
-      margin: 15px 0;
+    .section {
+      background-color: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
+    .section p,
     .section ul {
-      list-style-type: '— '; /* 使用更现代的列表符号 */
-      padding-left: 25px;
+      margin: 10px 0; 
     }
-    
-    .section li {
-        padding-left: 10px;
-        margin-bottom: 8px;
+    .section ul {
+      list-style-type: disc;
+      padding-left: 20px;
     }
-
     .section a {
-      color: #005f73;
+      color: #0a3d62;  
       text-decoration: none;
-      font-weight: 500;
     }
-
     .section a:hover {
-      color: #0a9396;
       text-decoration: underline;
     }
-    
-    /* 对出版物列表的特殊优化 */
-    #works p, #talks p {
-        margin-bottom: 1.2em;
-        padding-left: 5px;
-        border-left: 3px solid transparent;
-        transition: border-left 0.3s ease;
-    }
-    #works p:hover, #talks p:hover {
-        border-left: 3px solid #0a9396;
+
+    footer {
+      background-color: #0a3d62;
+      color: #f0faff;
+      text-align: center;
+      padding: 10px 0;
     }
 
-    /* 页脚 */
-    footer {
-      background-color: #001219;
-      color: #f8f9fa;
-      text-align: center;
-      padding: 1.5rem 0;
-      margin-top: 20px;
-    }
-    
-    /* 响应式设计 */
     @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.8em;
-      }
       .profile {
         flex-direction: column;
         align-items: center;
-        text-align: center;
       }
-      .profile img {
-        margin-right: 0;
-        margin-bottom: 20px;
+
+      .profile-info {
+        margin: 10px 0 0 0;
       }
-      .nav-buttons {
-          flex-direction: column;
-      }
-      .nav-buttons .button {
-          margin: 4px 0;
+
+      header h1 {
+        font-size: 2em;
       }
     }
+
+    /* Navigation buttons: Scheme E style */
+    .nav-buttons {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      max-width: 1000px;
+      margin: 0 auto 3px auto;
+      display: flex;
+      padding: 0;
+    }
+    .nav-buttons .button {
+      flex: 1;
+      background-color: #fff;
+      border: 2px solid #0a3d62; 
+      color: #0a3d62;
+      border-radius: 8px;
+      padding: 6px;
+      margin: 0 3px;
+      transition: all 0.3s ease;
+      font-size: 1em;
+      outline: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    .nav-buttons .button:hover {
+      background-color: #0a3d62; /* Accent color */
+      color: #f0faff;
+    }
+
   </style>
 </head>
 
 <body>
-  <canvas id="interactive-bg"></canvas>
   <!-- 头部 -->
   <header>
     <h1>Xin-Qiang Cai @ RIKEN-AIP, Tokyo, Japan</h1>
@@ -469,150 +345,24 @@
       <h2>Correspondence</h2>
       <p>Email: xinqiang.cai@riken.jp, jkrsndivide@gmail.com</p>
     </div>
+
+    <!-- Statistics & Map (commented out) -->
+    <!--
+    <div class="section" style="text-align:center;">
+      <h2>Site Statistics &amp; Location</h2>
+      <p>访问量统计（示例）: <span id="visitor-count">1234</span></p>
+      <p>地理位置（示例）:</p>
+      <iframe
+        width="400"
+        height="300"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.9239697840503!2d139.74543321526142!3d35.66177703825744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188c0ebc0dcd5b%3A0x4692009f1df27fcb!2sTokyo%20Tower!5e0!3m2!1sen!2sjp!4v1674988400"
+      ></iframe>
+    </div>
+    -->
   </main>
-
-  <!-- 页脚 -->
-  <footer>
-    <p>© 2025 Xin-Qiang Cai. Last updated: July 2025.</p>
-  </footer>
-
-  <script>
-  (() => {
-    // --- DOM Elements ---
-    const canvas = document.getElementById('interactive-bg');
-    const ctx = canvas.getContext('2d');
-    const mainContent = document.querySelector('main');
-    const dataWidget = document.createElement('div');
-    dataWidget.id = 'data-widget';
-    dataWidget.innerHTML = `<p id="widget-status">Connecting to your world...</p><p class="blessing-message"></p>`;
-    document.body.appendChild(dataWidget);
-
-    // --- Core Parameters ---
-    const PARTICLE_COUNT = 150;
-    const PARTICLE_COLOR = 'rgba(0, 95, 115, 0.8)';
-    const LINE_COLOR = 'rgba(0, 95, 115, 0.25)';
-    const MAX_SPEED = 2;
-    const MOUSE_RADIUS = 150;
-    const LAZY_SCROLL_FACTOR = 0.08; // Smaller number = more "lag"
-
-    // --- Global State ---
-    let width, height, particles;
-    let liveWindForce = { x: 0, y: 0 };
-    const mouse = { x: null, y: null };
-    let contentRect = { left: 0, right: 0 };
-    
-    // 【New】State for lazy scrolling widget
-    let widgetTargetY = 150;
-    let widgetCurrentY = 150;
-
-    // =================================================================
-    // --- Particle Class ---
-    // (No changes from the previous version)
-    // =================================================================
-    class Particle { /* ... The Particle class code is unchanged ... */
-      constructor(x, y) { this.pos = { x: x, y: y }; this.vel = { x: (Math.random() - 0.5), y: (Math.random() - 0.5) }; this.acc = { x: 0, y: 0 }; }
-      applyForce(force) { this.acc.x += force.x; this.acc.y += force.y; }
-      update() { this.vel.x += this.acc.x; this.vel.y += this.acc.y; const speed = Math.sqrt(this.vel.x**2 + this.vel.y**2); if (speed > MAX_SPEED) { this.vel.x = (this.vel.x / speed) * MAX_SPEED; this.vel.y = (this.vel.y / speed) * MAX_SPEED; } this.pos.x += this.vel.x; this.pos.y += this.vel.y; this.acc = { x: 0, y: 0 }; }
-      edges() { if (this.pos.x > width) this.pos.x = 0; if (this.pos.x < 0) this.pos.x = width; if (this.pos.y > height) this.pos.y = 0; if (this.pos.y < 0) this.pos.y = height; }
-    }
-
-    // =================================================================
-    // --- Data Fetching & Widget Update ---
-    // (No changes from the previous version)
-    // =================================================================
-    async function fetchWorldData() { /* ... The fetchWorldData function is unchanged ... */
-        try { const geoResponse = await fetch('https://ipapi.co/json/'); if (!geoResponse.ok) throw new Error('Geolocation failed'); const geoData = await geoResponse.json(); const { latitude, longitude, city, country_name } = geoData; const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t=wind_speed_10m,wind_direction_10m`; const weatherResponse = await fetch(weatherApiUrl); if (!weatherResponse.ok) throw new Error('Weather data failed'); const weatherData = await weatherResponse.json(); const { wind_speed_10m, wind_direction_10m } = weatherData.current; const angleRad = (wind_direction_10m - 90) * (Math.PI / 180); const forceMagnitude = (wind_speed_10m / 50); liveWindForce.x = Math.cos(angleRad) * forceMagnitude; liveWindForce.y = Math.sin(angleRad) * forceMagnitude; updateWidget(city, country_name, wind_speed_10m, wind_direction_10m); } catch (error) { console.error("Failed to fetch real-world data:", error); const statusP = document.getElementById('widget-status'); statusP.innerHTML = "Could not connect to your world, but the sentiment remains the same."; const blessingP = dataWidget.querySelector('.blessing-message'); blessingP.innerHTML = "Wishing you a wonderful day, wherever you are. ✨"; dataWidget.classList.add('loaded'); }
-    }
-    function updateWidget(city, country, speed, direction) { /* ... The updateWidget function is unchanged ... */
-        const statusP = document.getElementById('widget-status'); statusP.innerHTML = `Welcome from <strong>${city}, ${country}</strong>.<br>The current wind is <strong>${speed.toFixed(1)} km/h</strong> from the <strong>${getDirection(direction)}</strong>.`; const blessingP = dataWidget.querySelector('.blessing-message'); blessingP.innerHTML = "This animation is gently guided by this breeze, carrying a wish for your happiness. Hope you have a great day."; dataWidget.classList.add('loaded');
-    }
-    function getDirection(angle) { /* ... The getDirection function is unchanged ... */
-        const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']; return directions[Math.round(angle / 22.5) % 16];
-    }
-    
-    // =================================================================
-    // --- Core Animation & Interaction Logic ---
-    // =================================================================
-    
-    // 【New】This function now also positions the widget
-    function updateLayout() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-
-      const rect = mainContent.getBoundingClientRect();
-      contentRect.left = rect.left;
-      contentRect.right = rect.right;
-      
-      // Position widget to the right of the content
-      dataWidget.style.left = `${contentRect.right + 20}px`;
-    }
-
-    function setup() {
-      updateLayout(); // Initial layout calculation
-      particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle(Math.random() * width, Math.random() * height));
-    }
-
-    function updateParticles() {
-      particles.forEach(p => {
-        p.applyForce(liveWindForce);
-
-        // 【Key Change】 Gutter-only mouse interaction
-        if (mouse.x !== null && (mouse.x < contentRect.left || mouse.x > contentRect.right)) {
-            const dx = p.pos.x - mouse.x;
-            const dy = p.pos.y - mouse.y;
-            const distSq = dx * dx + dy * dy;
-            if (distSq < MOUSE_RADIUS * MOUSE_RADIUS && distSq > 1) {
-                const forceMag = (1 - Math.sqrt(distSq) / MOUSE_RADIUS) * 0.1;
-                p.applyForce({ x: dx * forceMag, y: dy * forceMag });
-            }
-        }
-        
-        p.update();
-        p.edges();
-      });
-    }
-
-    function draw() { /* ... The draw function is unchanged ... */
-        ctx.clearRect(0, 0, width, height); ctx.strokeStyle = LINE_COLOR;
-        for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const p1 = particles[i], p2 = particles[j]; const dx = p1.pos.x - p2.pos.x, dy = p1.pos.y - p2.pos.y; const dist = Math.sqrt(dx * dx + dy * dy); if (dist < 120) { ctx.globalAlpha = (1 - dist / 120) * 0.5; ctx.beginPath(); ctx.moveTo(p1.pos.x, p1.pos.y); ctx.lineTo(p2.pos.x, p2.pos.y); ctx.stroke(); } } }
-        ctx.fillStyle = PARTICLE_COLOR; ctx.globalAlpha = 0.8;
-        for (const p of particles) { ctx.beginPath(); ctx.arc(p.pos.x, p.pos.y, 1.5, 0, Math.PI * 2); ctx.fill(); }
-    }
-
-    function animate() {
-      // Particle logic
-      updateParticles();
-      draw();
-      
-      // 【New】 Widget lazy scroll logic
-      widgetCurrentY += (widgetTargetY - widgetCurrentY) * LAZY_SCROLL_FACTOR;
-      dataWidget.style.top = `${widgetCurrentY}px`;
-
-      requestAnimationFrame(animate);
-    }
-
-    // --- Initialization & Event Listeners ---
-    setup();
-    animate();
-    fetchWorldData();
-    
-    // Update target on scroll
-    window.addEventListener('scroll', () => {
-      widgetTargetY = window.scrollY + 150; // 150px offset from viewport top
-    });
-
-    // Recalculate layout on resize
-    window.addEventListener('resize', () => {
-        setup();
-        updateLayout();
-    });
-
-    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
-
-  })();
-</script>
 </body>
 </html>

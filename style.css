@@ -1,65 +1,46 @@
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f9;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+/* In your <style> tag, replace the old #data-widget rule with this one */
+
+#data-widget {
+  /* 【Key Change】 Use absolute positioning to scroll with the page */
+  position: absolute;
+  top: 150px; /* Initial vertical position, will be updated by JS */
+  
+  /* Horizontal positioning will be set by JS to stay outside the content */
+  
+  padding: 15px;
+  max-width: 250px;
+  z-index: 1001;
+  
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  color: #343a40;
+  font-size: 14px;
+  line-height: 1.6;
+
+  /* We keep the transition for the initial fade-in */
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
 }
 
-.password-container {
-    text-align: center;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+#data-widget.loaded {
+  opacity: 1;
 }
 
-.password-container h1 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
+#data-widget strong {
+  color: #005f73;
 }
 
-.password-container input {
-    padding: 10px;
-    font-size: 1em;
-    margin-bottom: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.password-container button {
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.password-container button:hover {
-    background-color: #0056b3;
-}
-
-.nutrition-tracker {
-    display: none;
-}
-
-.button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: #0056b3;
+#data-widget .blessing-message {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 95, 115, 0.2);
+  font-style: italic;
+  font-size: 13px;
+  color: #555;
 }
