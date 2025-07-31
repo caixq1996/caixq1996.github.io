@@ -654,7 +654,7 @@
         currentSeason = getSeason(latitude, month);
         particles.forEach(p => p.reset()); // Reset existing particles to the new season
 
-        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t=wind_speed_10m,wind_direction_10m`;
+        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=wind_speed_10m,wind_direction_10m`;
         const weatherResponse = await fetch(weatherApiUrl);
         if (!weatherResponse.ok) throw new Error('Weather data failed');
         const weatherData = await weatherResponse.json();
