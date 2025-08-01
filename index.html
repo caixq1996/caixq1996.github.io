@@ -623,12 +623,19 @@
         const geoData = await geoResponse.json();
         
         const { latitude, longitude, city, country_name } = geoData;
-        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10m`;
+        
+        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10`;
         const weatherResponse = await fetch(weatherApiUrl);
         if (!weatherResponse.ok) throw new Error('Weather data failed');
         
         const weatherData = await weatherResponse.json();
-        const { weather_code, precipitation, wind_speed_10m, wind_direction_10m } = weatherData.current;
+
+        // 【关键修正】
+        // API在返回的JSON数据中，将当前天气信息放在了 `current_weather` 对象里，而不是 `current`。
+        // 同时，`precipitation` 和 `is_day` 也在 `current` 对象里，而不在 `current_weather` 里。我们需要分开获取。
+        const { weather_code, wind_speed_10m, wind_direction_10m } = weatherData.current_weather;
+        const { precipitation, is_day } = weatherData.current;
+
 
         // --- Wind Force Calculation (always needed) ---
         const angleRad = (wind_direction_10m - 90 + 180) * (Math.PI / 180);
@@ -650,6 +657,7 @@
 
       } catch (error) {
         // Fallback state
+        console.error("Failed to fetch or process real-world data:", error); // 在控制台打印详细错误
         currentEffect = 'summer'; // A nice default
         setupParticles(0);
         updateWidget_Error();
