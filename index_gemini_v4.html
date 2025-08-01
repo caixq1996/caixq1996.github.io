@@ -491,188 +491,102 @@
     const PARTICLE_COUNT = 150;
     const PARTICLE_COLOR = 'rgba(0, 95, 115, 0.8)';
     const LINE_COLOR = 'rgba(0, 95, 115, 0.25)';
-    const RAIN_COLOR = 'rgba(174, 194, 222, 0.5)';
     const MAX_SPEED = 2;
     const MOUSE_RADIUS = 150;
-    const LAZY_SCROLL_FACTOR = 0.08;
+    const LAZY_SCROLL_FACTOR = 0.08; // Smaller number = more "lag"
 
     // --- Global State ---
-    let width, height;
+    let width, height, particles;
+    let liveWindForce = { x: 0, y: 0 };
     const mouse = { x: null, y: null };
     let contentRect = { left: 0, right: 0 };
-    let widgetTargetY = 150, widgetCurrentY = 150;
-
-    // 【NEW】 Dual-Engine Animation State
-    let isRaining = false;
-    let particles = [];
-    let raindrops = [];
-    let liveWindForce = { x: 0, y: 0 };
+    
+    // 【New】State for lazy scrolling widget
+    let widgetTargetY = 150;
+    let widgetCurrentY = 150;
 
     // =================================================================
-    // --- Particle & Raindrop Classes ---
+    // --- Particle Class ---
+    // (No changes from the previous version)
     // =================================================================
-    class Particle { /* Unchanged from previous version */ 
+    class Particle { /* ... The Particle class code is unchanged ... */
       constructor(x, y) { this.pos = { x: x, y: y }; this.vel = { x: (Math.random() - 0.5), y: (Math.random() - 0.5) }; this.acc = { x: 0, y: 0 }; }
       applyForce(force) { this.acc.x += force.x; this.acc.y += force.y; }
       update() { this.vel.x += this.acc.x; this.vel.y += this.acc.y; const speed = Math.sqrt(this.vel.x**2 + this.vel.y**2); if (speed > MAX_SPEED) { this.vel.x = (this.vel.x / speed) * MAX_SPEED; this.vel.y = (this.vel.y / speed) * MAX_SPEED; } this.pos.x += this.vel.x; this.pos.y += this.vel.y; this.acc = { x: 0, y: 0 }; }
       edges() { if (this.pos.x > width) this.pos.x = 0; if (this.pos.x < 0) this.pos.x = width; if (this.pos.y > height) this.pos.y = 0; if (this.pos.y < 0) this.pos.y = height; }
     }
 
-    class Raindrop {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height - height; // Start off-screen
-            this.speed = Math.random() * 4 + 2; // Varying speed for depth
-            this.length = this.speed * 2; // Faster drops are longer
-        }
-
-        update() {
-            this.y += this.speed;
-            if (this.y > height) {
-                this.y = Math.random() * -100; // Reset above the screen
-                this.x = Math.random() * width;
-            }
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x, this.y + this.length);
-            ctx.stroke();
-        }
+    // =================================================================
+    // --- Data Fetching & Widget Update ---
+    // (No changes from the previous version)
+    // =================================================================
+    async function fetchWorldData() { /* ... The fetchWorldData function is unchanged ... */
+        try { const geoResponse = await fetch('https://ipapi.co/json/'); if (!geoResponse.ok) throw new Error('Geolocation failed'); const geoData = await geoResponse.json(); const { latitude, longitude, city, country_name } = geoData; const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=wind_speed_10m,wind_direction_10m`; const weatherResponse = await fetch(weatherApiUrl); if (!weatherResponse.ok) throw new Error('Weather data failed'); const weatherData = await weatherResponse.json(); const { wind_speed_10m, wind_direction_10m } = weatherData.current; const angleRad = (wind_direction_10m + 90) * (Math.PI / 180); const forceMagnitude = (wind_speed_10m / 50); liveWindForce.x = Math.cos(angleRad) * forceMagnitude; liveWindForce.y = Math.sin(angleRad) * forceMagnitude; updateWidget(city, country_name, wind_speed_10m, wind_direction_10m); } catch (error) { console.error("Failed to fetch real-world data:", error); const statusP = document.getElementById('widget-status'); statusP.innerHTML = "Could not connect to your world, but the sentiment remains the same."; const blessingP = dataWidget.querySelector('.blessing-message'); blessingP.innerHTML = "Wishing you a wonderful day, wherever you are. ✨"; dataWidget.classList.add('loaded'); }
     }
-
-
-    // =================================================================
-    // --- Data Fetching & State Management ---
-    // =================================================================
-    async function fetchWorldData() {
-        try {
-            const geoResponse = await fetch('https://ipapi.co/json/');
-            if (!geoResponse.ok) throw new Error('Geolocation failed');
-            const geoData = await geoResponse.json();
-            const { latitude, longitude, city, country_name } = geoData;
-
-            // 【NEW】 Requesting precipitation and weather_code
-            const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t=wind_speed_10m,wind_direction_10m,weather_code,precipitation`;
-            const weatherResponse = await fetch(weatherApiUrl);
-            if (!weatherResponse.ok) throw new Error('Weather data failed');
-            const weatherData = await weatherResponse.json();
-            const { wind_speed_10m, wind_direction_10m, weather_code, precipitation } = weatherData.current;
-
-            if (isRainCode(weather_code)) {
-                // --- SETUP FOR RAIN ---
-                isRaining = true;
-                setupRain(precipitation);
-                updateWidgetForRain(city, country_name, precipitation);
-            } else {
-                // --- SETUP FOR WIND ---
-                isRaining = false;
-                setupWind();
-                const angleRad = (wind_direction_10m - 90 + 180) * (Math.PI / 180);
-                const forceMagnitude = (wind_speed_10m / 50);
-                liveWindForce = { x: Math.cos(angleRad) * forceMagnitude, y: Math.sin(angleRad) * forceMagnitude };
-                updateWidgetForWind(city, country_name, wind_speed_10m, wind_direction_10m);
-            }
-
-        } catch (error) {
-            console.error("Failed to fetch real-world data:", error);
-            setupWind(); // Fallback to the default wind animation
-            const statusP = document.getElementById('widget-status');
-            statusP.innerHTML = "Could not connect to your world, but the sentiment remains the same.";
-            const blessingP = dataWidget.querySelector('.blessing-message');
-            blessingP.innerHTML = "Wishing you a wonderful day, wherever you are. ✨";
-            dataWidget.classList.add('loaded');
-        }
+    function updateWidget(city, country, speed, direction) { /* ... The updateWidget function is unchanged ... */
+        const statusP = document.getElementById('widget-status'); statusP.innerHTML = `Welcome from <strong>${city}, ${country}</strong>.<br>The current wind is <strong>${speed.toFixed(1)} km/h</strong> from the <strong>${getDirection(direction)}</strong>.`; const blessingP = dataWidget.querySelector('.blessing-message'); blessingP.innerHTML = "This animation is gently guided by this breeze, carrying a wish for your happiness. Hope you have a great day."; dataWidget.classList.add('loaded');
+    }
+    function getDirection(angle) { /* ... The getDirection function is unchanged ... */
+        const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']; return directions[Math.round(angle / 22.5) % 16];
     }
     
-    // Helper to check WMO Weather Interpretation Codes
-    function isRainCode(code) {
-        // Codes for Drizzle, Rain, Freezing Rain, and Showers
-        return (code >= 51 && code <= 67) || (code >= 80 && code <= 82);
-    }
-    
-    function updateWidgetForWind(city, country, speed, direction) {
-        const statusP = document.getElementById('widget-status');
-        statusP.innerHTML = `Welcome from <strong>${city}, ${country}</strong>.<br>The current wind is <strong>${speed.toFixed(1)} km/h</strong> from the <strong>${getDirection(direction)}</strong>.`;
-        const blessingP = dataWidget.querySelector('.blessing-message');
-        blessingP.innerHTML = "This animation is gently guided by this breeze, carrying a wish for your happiness. Hope you have a great day.";
-        dataWidget.classList.add('loaded');
-    }
-    
-    function updateWidgetForRain(city, country, precipitation) {
-        const statusP = document.getElementById('widget-status');
-        statusP.innerHTML = `Welcome from <strong>${city}, ${country}</strong>.<br>It seems to be raining, with <strong>${precipitation.toFixed(1)} mm</strong> of precipitation.`;
-        const blessingP = dataWidget.querySelector('.blessing-message');
-        blessingP.innerHTML = "This gentle rain mirrors yours. May it bring calm and comfort to your day. Stay cozy.";
-        dataWidget.classList.add('loaded');
-    }
-
-    function getDirection(angle) { const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']; return directions[Math.round(angle / 22.5) % 16]; }
-    
-
     // =================================================================
-    // --- Core Animation Logic ---
+    // --- Core Animation & Interaction Logic ---
     // =================================================================
-    function setupLayout() {
+    
+    // 【New】This function now also positions the widget
+    function updateLayout() {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
+
       const rect = mainContent.getBoundingClientRect();
-      contentRect = { left: rect.left, right: rect.right };
+      contentRect.left = rect.left;
+      contentRect.right = rect.right;
+      
+      // Position widget to the right of the content
       dataWidget.style.left = `${contentRect.right + 20}px`;
     }
 
-    function setupWind() {
-      raindrops = []; // Clear rain
+    function setup() {
+      updateLayout(); // Initial layout calculation
       particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle(Math.random() * width, Math.random() * height));
     }
 
-    function setupRain(precipitation) {
-        particles = []; // Clear particles
-        const baseCount = 50;
-        const rainMultiplier = 300; // Adjust for more/less rain effect
-        const numDrops = Math.min(baseCount + precipitation * rainMultiplier, 700); // Cap at 700 drops for performance
-        raindrops = Array.from({ length: numDrops }, () => new Raindrop());
-    }
+    function updateParticles() {
+      particles.forEach(p => {
+        p.applyForce(liveWindForce);
 
-    function animate() {
-      // Update logic based on current weather state
-      if (isRaining) {
-        raindrops.forEach(d => d.update());
-      } else {
-        particles.forEach(p => {
-          p.applyForce(liveWindForce);
-          if (mouse.x !== null && (mouse.x < contentRect.left || mouse.x > contentRect.right)) {
-            const dx = p.pos.x - mouse.x, dy = p.pos.y - mouse.y;
+        // 【Key Change】 Gutter-only mouse interaction
+        if (mouse.x !== null && (mouse.x < contentRect.left || mouse.x > contentRect.right)) {
+            const dx = p.pos.x - mouse.x;
+            const dy = p.pos.y - mouse.y;
             const distSq = dx * dx + dy * dy;
             if (distSq < MOUSE_RADIUS * MOUSE_RADIUS && distSq > 1) {
-              p.applyForce({ x: (dx / distSq) * 10, y: (dy / distSq) * 10 });
+                const forceMag = (1 - Math.sqrt(distSq) / MOUSE_RADIUS) * 0.1;
+                p.applyForce({ x: dx * forceMag, y: dy * forceMag });
             }
-          }
-          p.update();
-          p.edges();
-        });
-      }
-      
-      // Draw logic based on current weather state
-      ctx.clearRect(0, 0, width, height);
-      if (isRaining) {
-        ctx.fillStyle = 'rgba(20, 30, 40, 0.1)'; // Dark rainy overlay
-        ctx.fillRect(0, 0, width, height);
-        ctx.strokeStyle = RAIN_COLOR;
-        ctx.lineWidth = 1.5;
-        raindrops.forEach(d => d.draw());
-      } else {
-        // Draw wind particles
-        ctx.strokeStyle = LINE_COLOR;
+        }
+        
+        p.update();
+        p.edges();
+      });
+    }
+
+    function draw() { /* ... The draw function is unchanged ... */
+        ctx.clearRect(0, 0, width, height); ctx.strokeStyle = LINE_COLOR;
         for (let i = 0; i < particles.length; i++) { for (let j = i + 1; j < particles.length; j++) { const p1 = particles[i], p2 = particles[j]; const dx = p1.pos.x - p2.pos.x, dy = p1.pos.y - p2.pos.y; const dist = Math.sqrt(dx * dx + dy * dy); if (dist < 120) { ctx.globalAlpha = (1 - dist / 120) * 0.5; ctx.beginPath(); ctx.moveTo(p1.pos.x, p1.pos.y); ctx.lineTo(p2.pos.x, p2.pos.y); ctx.stroke(); } } }
         ctx.fillStyle = PARTICLE_COLOR; ctx.globalAlpha = 0.8;
         for (const p of particles) { ctx.beginPath(); ctx.arc(p.pos.x, p.pos.y, 1.5, 0, Math.PI * 2); ctx.fill(); }
-      }
+    }
 
-      // Universal widget scroll logic
+    function animate() {
+      // Particle logic
+      updateParticles();
+      draw();
+      
+      // 【New】 Widget lazy scroll logic
       widgetCurrentY += (widgetTargetY - widgetCurrentY) * LAZY_SCROLL_FACTOR;
       dataWidget.style.top = `${widgetCurrentY}px`;
 
@@ -680,12 +594,21 @@
     }
 
     // --- Initialization & Event Listeners ---
-    setupLayout();
+    setup();
     animate();
     fetchWorldData();
     
-    window.addEventListener('scroll', () => { widgetTargetY = window.scrollY + 150; });
-    window.addEventListener('resize', setupLayout);
+    // Update target on scroll
+    window.addEventListener('scroll', () => {
+      widgetTargetY = window.scrollY + 150; // 150px offset from viewport top
+    });
+
+    // Recalculate layout on resize
+    window.addEventListener('resize', () => {
+        setup();
+        updateLayout();
+    });
+
     window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
     window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
