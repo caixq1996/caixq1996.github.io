@@ -624,16 +624,23 @@
         
         const { latitude, longitude, city, country_name } = geoData;
         
-        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10m`;
+        const weatherApiUrl =
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
+        `&current=weathercode,precipitation,is_day,wind_speed_10m,wind_direction_10m` +
+        `&timezone=auto`;
         
         const weatherResponse = await fetch(weatherApiUrl);
         if (!weatherResponse.ok) throw new Error('Weather API failed');
         
         const weatherData = await weatherResponse.json();
 
-        // 【最终、绝对正确的代码】: 从两个不同的对象中，分别获取所需的数据。
-        const { weather_code, wind_speed_10m, wind_direction_10m } = weatherData.current_weather;
-        const { precipitation, is_day } = weatherData.current;
+        const {
+          weathercode,              // 注意：无下划线
+          wind_speed_10m,
+          wind_direction_10m,
+          precipitation = 0,        // 避免降水缺失时为 undefined
+          is_day
+        } = weatherData.current;
 
 
         // --- Wind Force Calculation ---
@@ -642,14 +649,14 @@
         liveWindForce = { x: Math.cos(angleRad) * forceMagnitude, y: Math.sin(angleRad) * forceMagnitude };
         
         // --- State Decision Logic ---
-        if (isRaining(weather_code)) {
+        if (isRaining(weathercode)) {
             currentEffect = 'rain';
         } else {
             currentEffect = getSeason(latitude, new Date().getMonth());
         }
         
         setupParticles(precipitation);
-        updateWidget(city, country_name, wind_speed_10m, weather_code, precipitation);
+        updateWidget(city, country_name, wind_speed_10m, weathercode, precipitation);
 
       } catch (error) {
         // 【增强的错误处理】: 现在它会在浏览器控制台打印出具体的错误信息。
