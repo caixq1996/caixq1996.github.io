@@ -490,25 +490,23 @@
 
     // --- Core Parameters ---
     const MAX_PARTICLES = 200;
-    const PARTICLE_COLOR = 'rgba(0, 95, 115, 0.8)';
-    const MAX_SPEED = 2;
+    const MAX_SPEED = 2.5; // Slightly increased for more dynamic rain
     const MOUSE_RADIUS = 150;
     const LAZY_SCROLL_FACTOR = 0.08;
+    const GRAVITY = { x: 0, y: 0.05 }; // Constant downward force for rain
 
     // --- Global State ---
     let width, height, particles = [];
     let liveWindForce = { x: 0, y: 0 };
-    let currentEffect = 'loading'; // Can be 'loading', 'rain', 'spring', 'summer', 'autumn', 'winter'
+    let currentEffect = 'loading';
     const mouse = { x: null, y: null };
     let contentRect = { left: 0, right: 0 };
     let widgetTargetY = 150, widgetCurrentY = 150;
 
     // =================================================================
-    // --- Particle Superclasses and Subclasses ---
+    // --- 【NEW】Unified Base Particle Class ---
     // =================================================================
-
-    // Base class for all seasonal particles
-    class SeasonalParticle {
+    class Particle {
       constructor() {
         this.pos = { x: Math.random() * width, y: Math.random() * height };
         this.vel = { x: (Math.random() - 0.5), y: (Math.random() - 0.5) };
@@ -526,148 +524,113 @@
         this.edges();
       }
       edges() {
+        if (this.pos.y > height + this.size) this.pos.y = -this.size;
         if (this.pos.x > width + this.size) this.pos.x = -this.size;
         if (this.pos.x < -this.size) this.pos.x = width + this.size;
-        if (this.pos.y > height + this.size) this.pos.y = -this.size;
-        if (this.pos.y < -this.size) this.pos.y = height + this.size;
       }
+      draw(ctx) { /* Base draw method (can be empty) */ }
     }
-    
-    // 【New】 Dandelion Seed with physics-driven tail
-    class DandelionSeed extends SeasonalParticle {
-        constructor() {
-            super();
-            this.tailLength = this.size * 5 + 5;
-            this.tailAngle = 0;
-        }
-        update() {
-            super.update();
-            // Tail points opposite to velocity vector
-            this.tailAngle = Math.atan2(this.vel.y, this.vel.x) + Math.PI;
-            // Add a little flutter
-            this.tailAngle += (Math.random() - 0.5) * 0.2;
-        }
+
+    // --- Specialized Particle Subclasses ---
+
+    class DandelionSeed extends Particle {
+        constructor() { super(); this.tailLength = this.size * 5 + 5; this.tailAngle = 0; }
+        update() { super.update(); this.tailAngle = Math.atan2(this.vel.y, this.vel.x) + Math.PI + (Math.random() - 0.5) * 0.2; }
         draw(ctx) {
             ctx.globalAlpha = this.opacity;
-            // Draw tail
-            ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.7})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(this.pos.x, this.pos.y);
-            const endX = this.pos.x + Math.cos(this.tailAngle) * this.tailLength;
-            const endY = this.pos.y + Math.sin(this.tailAngle) * this.tailLength;
-            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * 0.7})`; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(this.pos.x, this.pos.y);
+            ctx.lineTo(this.pos.x + Math.cos(this.tailAngle) * this.tailLength, this.pos.y + Math.sin(this.tailAngle) * this.tailLength);
             ctx.stroke();
-            // Draw seed head
-            ctx.fillStyle = `rgba(255, 248, 220, ${this.opacity})`;
-            ctx.beginPath();
-            ctx.arc(this.pos.x, this.pos.y, this.size / 2, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillStyle = `rgba(255, 248, 220, ${this.opacity})`; ctx.beginPath();
+            ctx.arc(this.pos.x, this.pos.y, this.size / 2, 0, Math.PI * 2); ctx.fill();
         }
     }
 
-    // Generic class for other seasons (Sakura, Leaf, Snow)
-    class GenericSeasonalParticle extends SeasonalParticle {
-        constructor(char, color) {
+    class GenericSeasonalParticle extends Particle {
+        constructor(char, color) { super(); this.char = char; this.color = color; this.rotation = Math.random() * Math.PI * 2; }
+        update() { super.update(); this.rotation += this.vel.x * 0.05; }
+        draw(ctx) {
+            ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color; ctx.font = `${this.size * 8}px serif`;
+            ctx.save(); ctx.translate(this.pos.x, this.pos.y); ctx.rotate(this.rotation);
+            ctx.fillText(this.char, 0, 0); ctx.restore();
+        }
+    }
+
+    // 【NEW】 RainDrop now inherits from the base Particle class
+    class RainDrop extends Particle {
+        constructor() {
             super();
-            this.char = char;
-            this.color = color;
-            this.rotation = Math.random() * Math.PI * 2;
+            this.len = this.size * 5 + 5;
+            this.pos.y = Math.random() * -height; // Start off-screen
         }
         update() {
             super.update();
-            this.rotation += this.vel.x * 0.05; // Rotate as it moves
-        }
-        draw(ctx) {
-            ctx.globalAlpha = this.opacity;
-            ctx.fillStyle = this.color;
-            ctx.font = `${this.size * 8}px serif`;
-            ctx.save();
-            ctx.translate(this.pos.x, this.pos.y);
-            ctx.rotate(this.rotation);
-            ctx.fillText(this.char, 0, 0);
-            ctx.restore();
-        }
-    }
-
-    // 【New】 RainDrop class
-    class RainDrop {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.len = Math.random() * 15 + 5;
-            this.speed = Math.random() * 6 + 4;
-        }
-        update(precipitation) {
-            this.y += this.speed + (precipitation * 3); // Speed up with more rain
-            if (this.y > height) {
-                this.y = Math.random() * -100;
-                this.x = Math.random() * width;
+            // Raindrops reset higher up when they go off the bottom edge
+            if (this.pos.y > height + this.size) {
+              this.pos.y = -this.size - Math.random() * 50;
+              this.pos.x = Math.random() * width;
+              this.vel.y = (Math.random() * 0.5 + 0.5) * MAX_SPEED; // Reset velocity
             }
         }
         draw(ctx) {
+            const angle = Math.atan2(this.vel.y, this.vel.x);
+            ctx.globalAlpha = this.opacity * 0.5;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+            ctx.lineWidth = this.size / 2;
             ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x, this.y + this.len);
+            ctx.moveTo(this.pos.x, this.pos.y);
+            ctx.lineTo(this.pos.x - Math.cos(angle) * this.len, this.pos.y - Math.sin(angle) * this.len);
             ctx.stroke();
         }
     }
     
     // =================================================================
-    // --- Data Fetching & State Logic ---
+    // --- Data Fetching & State Logic (Final Correct Version) ---
     // =================================================================
     async function fetchWorldData() {
       try {
-        /* ① 获取经纬度 --------------------------------------------------- */
-        const geoRes = await fetch('https://ipwho.is/');
-        if (!geoRes.ok) throw new Error('Geo API failed');
-        const { latitude, longitude, city, country } = await geoRes.json();
+        const geoResponse = await fetch('https://ipapi.co/json/');
+        if (!geoResponse.ok) throw new Error('Geolocation API failed');
+        const geoData = await geoResponse.json();
+        
+        const { latitude, longitude, city, country_name } = geoData;
+        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10m`;
+        const weatherResponse = await fetch(weatherApiUrl);
+        if (!weatherResponse.ok) throw new Error('Weather API failed');
+        const weatherData = await weatherResponse.json();
 
-        /* ② 调天气 -------------------------------------------------------- */
-        const url = `https://api.open-meteo.com/v1/forecast`
-          + `?latitude=${latitude}&longitude=${longitude}`
-          + `&current=weathercode,is_day,wind_speed_10m,wind_direction_10m`
-          + `&timezone=auto`;
-        const wRes = await fetch(url);
-        if (!wRes.ok) throw new Error('Weather API failed');
-        const {
-          weathercode,
-          wind_speed_10m,
-          wind_direction_10m,
-          is_day
-        } = (await wRes.json()).current;
+        const { weather_code, precipitation, wind_speed_10m, wind_direction_10m } = weatherData.current;
 
-        /* ③ 计算风、季节、粒子 ------------------------------------------- */
-        const angle = (wind_direction_10m - 90) * Math.PI / 180;
-        liveWindForce = {
-          x: Math.cos(angle) * wind_speed_10m / 30,
-          y: Math.sin(angle) * wind_speed_10m / 30
-        };
-        currentEffect = isRaining(weathercode) ? 'rain'
-                    : getSeason(latitude, new Date().getMonth());
+        const angleRad = (wind_direction_10m - 90 + 180) * (Math.PI / 180);
+        const forceMagnitude = (wind_speed_10m / 30);
+        liveWindForce = { x: Math.cos(angleRad) * forceMagnitude, y: Math.sin(angleRad) * forceMagnitude };
+        
+        if (isRaining(weather_code)) {
+            currentEffect = 'rain';
+        } else {
+            currentEffect = getSeason(latitude, new Date().getMonth());
+        }
+        
+        setupParticles(precipitation);
+        updateWidget(city, country_name, wind_speed_10m, weather_code, precipitation);
 
-        setupParticles();               // 不用 precipitation 时可去掉参
-        updateWidget(city, country, wind_speed_10m, weathercode, 0);
-      } catch (err) {
-        console.error('fetchWorldData error →', err);
+      } catch (error) {
+        console.error("Critical error fetching data:", error);
         currentEffect = 'summer';
         setupParticles(0);
         updateWidget_Error();
       }
     }
 
-
     function setupParticles(precipitation = 0) {
         particles = [];
         let particleCount = MAX_PARTICLES;
         
-        canvas.classList.remove('rain');
-        
         switch (currentEffect) {
             case 'rain':
-                particleCount = Math.min(500, 50 + precipitation * 400); // More rain = more drops
+                particleCount = Math.min(400, 50 + precipitation * 350);
                 for (let i = 0; i < particleCount; i++) particles.push(new RainDrop());
-                canvas.classList.add('rain');
                 break;
             case 'summer':
                 for (let i = 0; i < particleCount; i++) particles.push(new DandelionSeed());
@@ -685,54 +648,30 @@
     }
     
     // =================================================================
-    // --- Helper Functions & Widget Update ---
+    // --- Helper Functions & Widget Update (Unchanged) ---
     // =================================================================
-    function updateWidget(city, country, speed, code, precip) {
-        const weatherDesc = getWeatherDescription(code);
-        const blessingP = dataWidget.querySelector('.blessing-message');
-        
+    function updateWidget(city, country, speed, code, precip) { /* ... Unchanged ... */ 
+        const weatherDesc = getWeatherDescription(code); const blessingP = dataWidget.querySelector('.blessing-message');
         let statusText = `Welcome from <strong>${city}, ${country}</strong>.<br>The sky is showing <strong>${weatherDesc}</strong>, and a gentle breeze flows from your world to mine.`;
         let blessingText = `Wishing you find beauty in this moment, whether it's the gentle drift of a seed or the cleansing fall of rain. Have a wonderful day.`;
-        
-        if(currentEffect === 'rain') {
-            blessingText = `May this rain wash away any worries and bring fresh starts. Stay cozy and have a peaceful day.`;
-        }
-        
-        document.getElementById('widget-status').innerHTML = statusText;
-        blessingP.innerHTML = blessingText;
-        dataWidget.classList.add('loaded');
+        if(currentEffect === 'rain') { blessingText = `May this rain wash away any worries and bring fresh starts. Stay cozy and have a peaceful day.`; }
+        document.getElementById('widget-status').innerHTML = statusText; blessingP.innerHTML = blessingText; dataWidget.classList.add('loaded');
     }
-    
-    function updateWidget_Error() {
+    function updateWidget_Error() { /* ... Unchanged ... */
         document.getElementById('widget-status').innerHTML = "Could not connect to your world, but the sentiment remains the same.";
         dataWidget.querySelector('.blessing-message').innerHTML = "Wishing you a wonderful day, wherever you are. ✨";
         dataWidget.classList.add('loaded');
     }
-    
     function isRaining(code) { return (code >= 51 && code <= 67) || (code >= 80 && code <= 82); }
-    
-    function getSeason(lat, month) {
-      const isNorthern = lat >= 0;
-      if (isNorthern) {
-        if (month >= 2 && month <= 4) return 'spring';
-        if (month >= 5 && month <= 7) return 'summer';
-        if (month >= 8 && month <= 10) return 'autumn';
-        return 'winter';
-      } else { // Southern Hemisphere
-        if (month >= 8 && month <= 10) return 'spring';
-        if (month >= 11 || month <= 1) return 'summer';
-        if (month >= 2 && month <= 4) return 'autumn';
-        return 'winter';
-      }
+    function getSeason(lat, month) { /* ... Unchanged ... */
+        const isNorthern = lat >= 0; if (isNorthern) { if (month >= 2 && month <= 4) return 'spring'; if (month >= 5 && month <= 7) return 'summer'; if (month >= 8 && month <= 10) return 'autumn'; return 'winter'; } else { if (month >= 8 && month <= 10) return 'spring'; if (month >= 11 || month <= 1) return 'summer'; if (month >= 2 && month <= 4) return 'autumn'; return 'winter'; }
+    }
+    function getWeatherDescription(code) { /* ... Unchanged ... */
+        const wmo = { 0: "Clear Sky", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 48: "Depositing Rime Fog", 51: "Light Drizzle", 53: "Moderate Drizzle", 55: "Dense Drizzle", 61: "Slight Rain", 63: "Moderate Rain", 65: "Heavy Rain", 80: "Slight Rain Showers", 81: "Moderate Rain Showers", 82: "Violent Rain Showers", 95: "Thunderstorm" }; return wmo[code] || "Unique Weather";
     }
 
-    function getWeatherDescription(code) {
-        const wmo = { 0: "Clear Sky", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 48: "Depositing Rime Fog", 51: "Light Drizzle", 53: "Moderate Drizzle", 55: "Dense Drizzle", 61: "Slight Rain", 63: "Moderate Rain", 65: "Heavy Rain", 80: "Slight Rain Showers", 81: "Moderate Rain Showers", 82: "Violent Rain Showers", 95: "Thunderstorm" };
-        return wmo[code] || "Unique Weather";
-    }
-    
     // =================================================================
-    // --- Core Animation Loop & Listeners ---
+    // --- Core Animation Loop & Listeners (Final Unified Version) ---
     // =================================================================
     function updateLayout() { /* ... Unchanged ... */
         width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height;
@@ -745,26 +684,21 @@
       widgetCurrentY += (widgetTargetY - widgetCurrentY) * LAZY_SCROLL_FACTOR;
       dataWidget.style.top = `${widgetCurrentY}px`;
       
-      // Clear canvas based on effect
-      if (currentEffect !== 'rain') {
-        ctx.clearRect(0, 0, width, height);
-      } else {
-        // Rain fade effect
-        ctx.fillStyle = 'rgba(172, 182, 196, 0.1)';
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      // Update and draw particles based on state
-      if (currentEffect === 'rain') {
-        const precipitation = particles.length / 400; // Infer precipitation from particle count
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1.5;
-        ctx.globalAlpha = 0.5;
-        particles.forEach(p => { p.update(precipitation); p.draw(ctx); });
-      } 
-      else if (currentEffect !== 'loading') {
+      // Always clear the canvas to transparent
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update and draw all particles through the unified physics engine
+      if (currentEffect !== 'loading') {
         particles.forEach(p => {
+            // Apply global wind force to everyone
             p.applyForce(liveWindForce);
+            
+            // Apply gravity ONLY to raindrops
+            if (p instanceof RainDrop) {
+                p.applyForce(GRAVITY);
+            }
+
+            // Apply mouse force to everyone (with gutter check)
             if (mouse.x !== null && (mouse.x < contentRect.left || mouse.x > contentRect.right)) {
                 const dx = p.pos.x - mouse.x, dy = p.pos.y - mouse.y;
                 const distSq = dx * dx + dy * dy;
@@ -773,6 +707,8 @@
                     p.applyForce({ x: dx * forceMag, y: dy * forceMag });
                 }
             }
+            
+            // Update position and draw the particle
             p.update();
             p.draw(ctx);
         });
