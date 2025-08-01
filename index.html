@@ -623,7 +623,7 @@
         const geoData = await geoResponse.json();
         
         const { latitude, longitude, city, country_name } = geoData;
-        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}¤t=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10m`;
+        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,is_day,wind_speed_10m,wind_direction_10m`;
         const weatherResponse = await fetch(weatherApiUrl);
         if (!weatherResponse.ok) throw new Error('Weather data failed');
         
