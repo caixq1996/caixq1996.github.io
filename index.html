@@ -633,8 +633,13 @@
         // 【关键修正】
         // API在返回的JSON数据中，将当前天气信息放在了 `current_weather` 对象里，而不是 `current`。
         // 同时，`precipitation` 和 `is_day` 也在 `current` 对象里，而不在 `current_weather` 里。我们需要分开获取。
-        const { weather_code, wind_speed_10m, wind_direction_10m } = weatherData.current_weather;
-        const { precipitation, is_day } = weatherData.current;
+        const { 
+            weather_code, 
+            precipitation, 
+            is_day, 
+            wind_speed_10m, 
+            wind_direction_10m 
+        } = weatherData.current;
 
 
         // --- Wind Force Calculation (always needed) ---
