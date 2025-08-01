@@ -618,44 +618,44 @@
     // =================================================================
     async function fetchWorldData() {
       try {
-        const geoRes = await fetch('https://ipapi.co/json/');
-        if (!geoRes.ok) throw new Error('Geolocation API failed');
-        const { latitude, longitude, city, country_name } = await geoRes.json();
+        /* ① 获取经纬度 --------------------------------------------------- */
+        const geoRes = await fetch('https://ipwho.is/');
+        if (!geoRes.ok) throw new Error('Geo API failed');
+        const { latitude, longitude, city, country } = await geoRes.json();
 
-        const weatherApiUrl =
-          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
-          `&current=weathercode,precipitation,is_day,wind_speed_10m,wind_direction_10m` +
-          `&timezone=auto`;
-
-        const weatherRes = await fetch(weatherApiUrl);
-        if (!weatherRes.ok) throw new Error('Weather API failed');
-
-        const weatherData = await weatherRes.json();
+        /* ② 调天气 -------------------------------------------------------- */
+        const url = `https://api.open-meteo.com/v1/forecast`
+          + `?latitude=${latitude}&longitude=${longitude}`
+          + `&current=weathercode,is_day,wind_speed_10m,wind_direction_10m`
+          + `&timezone=auto`;
+        const wRes = await fetch(url);
+        if (!wRes.ok) throw new Error('Weather API failed');
         const {
           weathercode,
           wind_speed_10m,
           wind_direction_10m,
-          precipitation = 0,
           is_day
-        } = weatherData.current;
+        } = (await wRes.json()).current;
 
-        // 计算风向
-        const angleRad = (wind_direction_10m - 90) * (Math.PI / 180);
-        const forceMag = wind_speed_10m / 30;
-        liveWindForce = { x: Math.cos(angleRad) * forceMag, y: Math.sin(angleRad) * forceMag };
+        /* ③ 计算风、季节、粒子 ------------------------------------------- */
+        const angle = (wind_direction_10m - 90) * Math.PI / 180;
+        liveWindForce = {
+          x: Math.cos(angle) * wind_speed_10m / 30,
+          y: Math.sin(angle) * wind_speed_10m / 30
+        };
+        currentEffect = isRaining(weathercode) ? 'rain'
+                    : getSeason(latitude, new Date().getMonth());
 
-        // 根据天气/季节切换效果
-        currentEffect = isRaining(weathercode) ? 'rain' : getSeason(latitude, new Date().getMonth());
-
-        setupParticles(precipitation);
-        updateWidget(city, country_name, wind_speed_10m, weathercode, precipitation);
+        setupParticles();               // 不用 precipitation 时可去掉参
+        updateWidget(city, country, wind_speed_10m, weathercode, 0);
       } catch (err) {
-        console.error('Data fetch failed:', err);
+        console.error('fetchWorldData error →', err);
         currentEffect = 'summer';
         setupParticles(0);
         updateWidget_Error();
       }
     }
+
 
     function setupParticles(precipitation = 0) {
         particles = [];
