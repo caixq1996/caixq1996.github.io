@@ -1,407 +1,391 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xin-Qiang Cai | RIKEN AIP</title>
+  <meta name="description" content="Xin-Qiang Cai — Reinforcement Learning, Reward Modeling, Weak Supervision. Postdoctoral Researcher at RIKEN AIP." />
+
+  <!-- Favicons & theme-color (light/dark) -->
+  <meta name="theme-color" content="#f8f9fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1a20" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="./icons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" href="./icons/favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="apple-touch-icon" href="./icons/android-chrome-192x192.png" sizes="192x192">
+  <link rel="mask-icon" href="./icons/favicon.svg" color="#0a9396">
+
   <style>
-    /* 
-      方案F: 现代科技蓝 (Modern Tech Blue)
-      - 主色调 (Primary): #005f73
-      - 强调色 (Accent): #0a9396
-      - 背景色 (Background): #f8f9fa
-      - 标题文字 (Title Text): #001219
-      - 正文文字 (Body Text): #343a40
-    */
+    /* ------------------------------------------------------------
+       Theme: Modern Tech Blue (Dark-friendly)
+       ------------------------------------------------------------ */
+    :root {
+      color-scheme: light dark; /* 让 UA 控件自适应明暗 */
+      --primary: #005f73;
+      --accent: #0a9396;
+      --title: #001219;
+      --body: #343a40;
+      --bg: #f8f9fa;
 
-    #data-widget {
-      /* 【Key Change】 Use absolute positioning to scroll with the page */
-      position: absolute;
-      top: 150px; /* Initial vertical position, will be updated by JS */
-      
-      /* Horizontal positioning will be set by JS to stay outside the content */
-      
-      padding: 15px;
-      max-width: 250px;
-      z-index: 1001;
-      
-      background-color: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      
-      color: #343a40;
-      font-size: 14px;
-      line-height: 1.6;
+      /* 玻璃卡片 */
+      --card-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+      --radius: 14px;
+      --radius-lg: 18px;
+      --maxw: 1040px;
 
-      /* We keep the transition for the initial fade-in */
-      transition: opacity 0.5s ease-in-out;
-      opacity: 0;
+      /* 画布 & 页面底色（RGB 供 JS 读取） */
+      --page-bg: 248,249,250;
+      --canvas-bg-rgb: 245,247,248;
+
+      /* 画布用到的三色（RGB 字符串） */
+      --primary-rgb: 0,95,115;   /* #005f73 */
+      --accent-rgb: 10,147,150;  /* #0a9396 */
+      --ink-rgb: 0,18,25;        /* #001219（浅色主题下为深墨） */
     }
 
-    #data-widget.loaded {
-      opacity: 1;
+    /* 系统暗色（且用户未手动选择时） */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) {
+        --title: #e6f3f6;
+        --body: #d7e6ea;
+        --card-bg: rgba(0, 18, 25, 0.60);
+        --glass-border: rgba(255,255,255,0.10);
+
+        --page-bg: 11,26,32;        /* #0b1a20 */
+        --canvas-bg-rgb: 11,26,32;
+
+        /* 暗色下“反色”：墨色改为浅色，主/辅色保持品牌 */
+        --primary-rgb: 0,95,115;
+        --accent-rgb: 10,147,150;
+        --ink-rgb: 235,247,249;     /* 浅墨，用于公式文字等 */
+      }
+
+      /* 暗色下 veil 改为深色版光晕，避免泛白 */
+      :root:not([data-theme]) .veil {
+        background:
+          radial-gradient(800px 400px at 20% 15%, rgba(0,0,0,0.25), transparent 60%),
+          radial-gradient(900px 480px at 80% 0%, rgba(0,95,115,0.18), transparent 55%),
+          linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.12));
+      }
     }
 
-    #data-widget strong {
-      color: #005f73;
+    /* 用户手动暗色 */
+    :root[data-theme="dark"] {
+      --title: #e6f3f6;
+      --body: #d7e6ea;
+      --card-bg: rgba(0, 18, 25, 0.60);
+      --glass-border: rgba(255,255,255,0.10);
+
+      --page-bg: 11,26,32;
+      --canvas-bg-rgb: 11,26,32;
+
+      --primary-rgb: 0,95,115;
+      --accent-rgb: 10,147,150;
+      --ink-rgb: 235,247,249;
+    }
+    :root[data-theme="dark"] .veil {
+      background:
+        radial-gradient(800px 400px at 20% 15%, rgba(0,0,0,0.25), transparent 60%),
+        radial-gradient(900px 480px at 80% 0%, rgba(0,95,115,0.18), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.12));
     }
 
-    #data-widget .blessing-message {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(0, 95, 115, 0.2);
-      font-style: italic;
-      font-size: 13px;
-      color: #555;
+    /* 手动浅色（按钮切换） */
+    :root[data-theme="light"] {
+      /* 使用默认 :root 的浅色值 */
     }
 
+    /* Typography & base */
+    html { scroll-behavior: smooth; background: rgb(var(--page-bg)); }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Sans', sans-serif;
       line-height: 1.7;
       margin: 0;
-      padding: 0;
-      /* 
-        【关键修改 #1】: 删除这里的 background-color 属性。
-        让body本身变透明，这样才能露出它后面的canvas。
-      */
-      color: #343a40;             /* 正文文字 */
-      scroll-behavior: smooth;
+      color: var(--body);
+      background: transparent; /* 露出底部 canvas */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+    a { color: #005f73; text-decoration: none; }
+    a:hover { color: #0a9396; text-decoration: underline; }
 
-    #interactive-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1; /* 将canvas置于最底层 */
-    }
-
-    /* 头部 */
+    /* Header */
     header {
-      background-color: #001219; /* 使用更深的标题文字色作为页头背景，更显沉稳 */
-      color: #f8f9fa;
-      padding: 1.5rem 0;
+      background: radial-gradient(1200px 300px at 50% 0%, rgba(10,147,150,0.25), transparent),
+                  linear-gradient(135deg, #001219 0%, #01202b 60%, #012a34 100%);
+      color: #f4f7f9;
+      padding: 2.2rem 0 1.6rem;
       text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
     }
-
     header h1 {
-      margin: 0;
-      font-size: 2.2em;
-      font-weight: 600;
+      margin: 0 0 6px;
+      font-size: clamp(1.6rem, 1rem + 2.4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.2px;
     }
-
-    /* 主体内容 */
-    main {
-      padding: 20px 15px;
-      max-width: 1000px;
+    header .tagline {
       margin: 0 auto;
+      max-width: var(--maxw);
+      font-size: clamp(0.9rem, 0.8rem + 0.4vw, 1.05rem);
+      opacity: 0.9;
     }
 
-    .nav-buttons {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      max-width: 1000px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 5px;
-      /* 【毛玻璃效果】 */
-      background-color: rgba(255, 255, 255, 0.65); /* 半透明背景 */
-      backdrop-filter: blur(12px);                 /* 模糊背景 */
-      -webkit-backdrop-filter: blur(12px);         /* 兼容Safari */
+    /* Nav */
+    .nav-wrap { position: sticky; top: 0; z-index: 1000; }
+    nav.nav-buttons {
+      display: flex; gap: 8px; justify-content: center; align-items: center;
+      margin: 0 auto; padding: 8px; max-width: var(--maxw);
+      background-color: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .nav-buttons a.button {
+      flex: 0 1 auto; padding: 10px 14px; border-radius: 10px; border: none;
+      background: transparent; color: var(--body); font-weight: 600; font-size: 0.98rem;
+      transition: all 0.25s ease; text-decoration: none;
+    }
+    .nav-buttons a.button:hover, .nav-buttons a.button.active {
+      background: var(--primary); color: #fff; transform: translateY(-1px);
+    }
+    /* 主题切换按钮 */
+    .nav-buttons .theme-toggle {
+      margin-left: auto;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-
-    /* 个人信息卡片 */
-    .profile, .section {
-      margin-bottom: 20px;
-      padding: 25px;
-      /* 【关键修改】将alpha值从0.75降到0.7，增加通透感 */
-      background-color: rgba(255, 255, 255, 0.7); 
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .profile {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-    }
-
-    .profile img {
-      border-radius: 10px;
-      width: 220px;
-      height: 280px;
-      object-fit: cover;
-      margin-right: 25px;
-    }
-
-    .profile-info {
-      flex: 1;
-    }
-
-    .profile-info h2 {
-      margin: 0 0 10px 0;
-      font-size: 2.5em; /* 增大中文名尺寸 */
-      font-family: "Kaiti", "STKaiti", "华文楷体", serif;
-      color: #001219; /* 标题文字 */
-      border-bottom: none; /* 个人信息中的标题不需要下划线 */
-    }
-
-    .profile-info p {
-      margin: 5px 0;
-      font-size: 1.05em;
-    }
-
-    .profile-info a {
-      color: #005f73; /* 主色调 */
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .profile-info a:hover {
-      color: #0a9396; /* 强调色 */
-      text-decoration: underline;
-    }
-
-    /* 导航按钮 */
-    .nav-buttons {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      max-width: 1000px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 5px;
-      background-color: rgba(248, 249, 250, 0.85); /* 半透明背景 */
-      backdrop-filter: blur(8px); /* 毛玻璃效果 */
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-buttons .button {
-      flex: 1;
-      background-color: transparent;
-      border: none;
-      color: #343a40;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 0 4px;
-      transition: all 0.3s ease;
-      font-size: 1em;
-      font-weight: 500;
+      border: 1px solid var(--glass-border);
+      padding: 9px 12px;
       cursor: pointer;
-      text-align: center;
+      background: transparent;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .nav-buttons .theme-toggle:hover { background: var(--primary); color: #fff; }
+
+    /* Layout */
+    main { padding: 20px 16px; max-width: var(--maxw); margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: 1.1fr 1.9fr; gap: 18px; }
+    @media (max-width: 920px) { .grid { grid-template-columns: 1fr; } }
+
+    .card, .section, .profile {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .profile {
+      /* 覆盖原来的 grid 双列 */
+      display: flex;              /* 用单维布局做上下堆叠 */
+      flex-direction: column;
+      align-items: center;        /* 居中更紧凑 */
+      gap: 12px;                  /* 控制图文间距，避免“照片下太空” */
+      padding: 18px 18px;         /* 稍收紧内边距 */
     }
 
-    .nav-buttons .button:hover, .nav-buttons .button:focus {
-      background-color: #005f73; /* 主色调 */
-      color: #ffffff;
-      transform: translateY(-2px);
+    /* 照片尺寸更灵活，且不会太大 */
+    .profile img {
+      width: min(260px, 50%);    /* 大屏不超过 260px，小屏自适应 */
+      height: auto;               /* 取消固定高度，避免多余留白 */
+      border-radius: 10px;       /* << 圆角，数值可调：12px/16px/20px */
+      margin: 0 0 8px 0;          /* 与文字的间距 */
     }
-    
-    /* 内容区域 */
-    .section {
-      background-color: #ffffff;
-      padding: 25px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      border: 1px solid #dee2e6;
+    .profile-info h2 {
+      margin: 2px 0 8px; font-size: clamp(1.8rem, 1rem + 2vw, 2.4rem);
+      font-family: "Kaiti", "STKaiti", "华文楷体", serif; color: var(--title);
     }
-    
+    .profile-info p { margin: 6px 0; font-size: 1.05rem; }
+
+    .section { padding: 26px; margin: 18px 0; }
     .section h2 {
-      color: #001219; /* 标题文字 */
-      border-bottom: 3px solid #005f73; /* 主色调下划线 */
-      padding-bottom: 10px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 1.6em;
+      color: var(--title); font-size: clamp(1.2rem, 1rem + 0.9vw, 1.6rem);
+      margin: 0 0 18px; padding-bottom: 10px; border-bottom: 3px solid var(--primary);
     }
+    .section h3 { margin: 8px 0 10px; font-size: 1.05rem; color: var(--title); }
+    .section ul { list-style: none; padding-left: 0; margin: 14px 0; }
+    .section li { position: relative; padding-left: 18px; margin-bottom: 8px; }
+    .section li::before { content: "—"; position: absolute; left: 0; top: 0; color: var(--accent); }
 
-    .section p, .section ul {
-      margin: 15px 0;
-    }
-
-    .section ul {
-      list-style-type: '— '; /* 使用更现代的列表符号 */
-      padding-left: 25px;
-    }
-    
-    .section li {
-        padding-left: 10px;
-        margin-bottom: 8px;
-    }
-
-    .section a {
-      color: #005f73;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .section a:hover {
-      color: #0a9396;
-      text-decoration: underline;
-    }
-    
-    /* 对出版物列表的特殊优化 */
+    /* Publications hover lane */
     #works p, #talks p {
-        margin-bottom: 1.2em;
-        padding-left: 5px;
-        border-left: 3px solid transparent;
-        transition: border-left 0.3s ease;
+      margin: 0 0 1.15em; padding: 0 0 0 6px;
+      border-left: 3px solid transparent; transition: border-color .25s ease;
     }
-    #works p:hover, #talks p:hover {
-        border-left: 3px solid #0a9396;
+    #works p:hover, #talks p:hover { border-left-color: var(--accent); }
+
+    /* Footer */
+    footer { background: #001219; color:#f8f9fa; text-align:center; padding: 1.6rem 0; margin-top: 24px; }
+
+    /* Background canvas + veil */
+    #interactive-bg { position: fixed; inset: 0; z-index: -2; }
+    .veil {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(800px 400px at 20% 15%, rgba(255,255,255,0.25), transparent 60%),
+        radial-gradient(900px 480px at 80% 0%, rgba(0,95,115,0.13), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.06));
+      pointer-events: none;
     }
 
-    /* 页脚 */
-    footer {
-      background-color: #001219;
-      color: #f8f9fa;
-      text-align: center;
-      padding: 1.5rem 0;
-      margin-top: 20px;
+    /* 数据挂件：跟随滚动；窄屏停靠右下 */
+    #data-widget {
+      position: absolute; top: 150px; left: 0;
+      padding: 14px 16px; max-width: 280px; z-index: 1001;
+      background-color: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: var(--shadow);
+      color: var(--body); font-size: 14px; line-height: 1.6; opacity: 0; transition: opacity .5s ease-in-out, transform .3s ease;
     }
-    
-    /* 响应式设计 */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.8em;
+    #data-widget.loaded { opacity: 1; }
+    #data-widget strong { color: var(--primary); }
+    #data-widget .blessing-message {
+      margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,95,115,0.18);
+      font-style: italic; font-size: 13px; color: #555;
+    }
+    @media (max-width: 1100px) {
+      #data-widget.is-docked {
+        position: fixed; right: 14px; bottom: 14px; top: auto !important; left: auto !important;
+        transform: translateY(0);
       }
-      .profile {
+    }
+
+    /* 当前章节高亮（JS 控制） */
+    .button[data-target].active { background: var(--primary); color:#fff; }
+    /* === 让照片卡片（.profile）与 Bio（#biography）等高，但不与 News 贴一起 === */
+    @media (min-width: 921px) {
+      .grid {
+        align-items: stretch;      /* 同一行等高由 Grid 托管 */
+        margin-bottom: 24px;       /* 与后面的 #news 留出安全间距 */
+      }
+
+      /* 取消固定高度，避免内容+内边距把视觉边界“压”到下面一块 */
+      .grid > .profile,
+      .grid > #biography {
+        margin: 0;
+        height: auto;              /* 关键：覆盖先前的 height:100% */
+      }
+
+      /* 照片卡片内部保持上下堆叠并可自然拉伸 */
+      .grid > .profile {
+        display: flex;
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .profile img {
-        margin-right: 0;
-        margin-bottom: 20px;
-      }
-      .nav-buttons {
-          flex-direction: column;
-      }
-      .nav-buttons .button {
-          margin: 4px 0;
       }
     }
+
+  /* 如果还想再松一点，可以给 #news 再加额外上边距（可选） */
+  /* #news { margin-top: 20px; } */
+
   </style>
 </head>
-
 <body>
-  <canvas id="interactive-bg"></canvas>
-  <!-- 头部 -->
+  <canvas id="interactive-bg" aria-hidden="true"></canvas>
+  <div class="veil" aria-hidden="true"></div>
+
   <header>
     <h1>Xin-Qiang Cai @ RIKEN-AIP, Tokyo, Japan</h1>
+    <p class="tagline">Reward Modeling • Reinforcement Learning & Imitation Learning • Weak Supervision</p>
   </header>
 
-  <!-- 文件主体 -->
+  <div class="nav-wrap">
+    <nav class="nav-buttons" aria-label="Section Navigation">
+      <a class="button" href="#biography" data-target="biography">Biography</a>
+      <a class="button" href="#news" data-target="news">News</a>
+      <a class="button" href="#talks" data-target="talks">Talks</a>
+      <a class="button" href="#works" data-target="works">Works</a>
+      <a class="button" href="#services" data-target="services">Services</a>
+      <a class="button" href="#awards" data-target="awards">Awards &amp; Honors</a>
+      <a class="button" href="#correspondence" data-target="correspondence">Correspondence</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    </nav>
+  </div>
+
   <main>
-    <!-- 顶部个人信息 -->
-    <div class="profile">
-      <img src="./images/caixq.JPG" alt="Xin-Qiang Cai">
-      <div class="profile-info">
-        <h2>蔡 欣 强</h2>
-        <p><strong>Xin-Qiang Cai</strong></p>
-        <p>Postdoctoral Researcher,</p>
-        <p><a href="https://aip.riken.jp/labs/generic_tech/imperfect_inf_learn/"> Imperfect Information Learning Team</a>,</p>
-        <p><a href="https://aip.riken.jp/">RIKEN Center for Advanced Intelligence Project</a></p>
-        <p>[<a href="https://scholar.google.com/citations?hl=en&amp;user=rtMUMooAAAAJ&amp;view_op=list_works&amp;gmla=ALUCkoXDtLBYZLV5MJOftJkHn-eBzh9vUFmU-eFvtizTEQpodfuHUzP01oZ0O8HCKk1SSzgNi2ehuvAezXKWd3R_fFvHx6-xZTwetjvxB39oArQmsikz5HhW483de8VDOm8YQQNjue53tPdZSizlNb3aCUk">Google Scholar</a>, <a href="https://dblp.org/pid/248/8034.html">dblp</a>]</p>
-        <p><b>Email</b>: xinqiang.cai [at] riken.jp</p>
-        <p>(alternative: jkrsndivide [at] gmail.com)</p>
-      </div>
-    </div>
+    <div class="grid">
+      <!-- Profile -->
+      <section class="profile card" aria-labelledby="name-cn">
+        <img src="./images/caixq.JPG" alt="Xin-Qiang Cai portrait" />
+        <div class="profile-info">
+          <h2 id="name-cn">蔡 欣 强</h2>
+          <p><strong>Xin-Qiang Cai</strong></p>
+          <p>Postdoctoral Researcher</p>
+          <p><a href="https://aip.riken.jp/labs/generic_tech/imperfect_inf_learn/">Imperfect Information Learning Team</a></p>
+          <p><a href="https://aip.riken.jp/">RIKEN Center for Advanced Intelligence Project</a></p>
+          <p>[ <a href="https://scholar.google.com/citations?hl=en&amp;user=rtMUMooAAAAJ&amp;view_op=list_works">Google Scholar</a>, <a href="https://dblp.org/pid/248/8034.html">dblp</a> ]</p>
+          <p><b>Email</b>: xinqiang.cai [at] riken.jp</p>
+          <p>(alternative: jkrsndivide [at] gmail.com)</p>
+        </div>
+      </section>
 
-    <!-- 组块按钮（去除背景，减少间距） -->
-    <div class="nav-buttons">
-      <button class="button" onclick="document.getElementById('biography').scrollIntoView()">Biography</button>
-      <button class="button" onclick="document.getElementById('news').scrollIntoView()">News</button>
-      <button class="button" onclick="document.getElementById('talks').scrollIntoView()">Talks</button>
-      <button class="button" onclick="document.getElementById('works').scrollIntoView()">Works</button>
-      <button class="button" onclick="document.getElementById('services').scrollIntoView()">Services</button>
-      <button class="button" onclick="document.getElementById('awards').scrollIntoView()">Awards &amp; Honors</button>
-      <!-- Correspondence 没有按钮 -->
-    </div>
+      <!-- Biography -->
+      <section id="biography" class="section" aria-labelledby="bio-title">
+        <h2 id="bio-title">Biography</h2>
+        <p>Currently I am a postdoctoral researcher in the Imperfect Information Learning Team at <a href="https://www.riken.jp/en/research/labs/aip/" target="_blank">RIKEN Center for Advanced Intelligence Project (AIP)</a>, led by professor <a href="https://www.ms.k.u-tokyo.ac.jp/sugi/" target="_blank">Masashi Sugiyama</a>.</p>
+        <p>I got my Ph.D. degree in <a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html">Department of Complexity Science and Engineering</a> in September 2024 from <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">The University of Tokyo</a> as a member of <a href="http://www.ms.k.u-tokyo.ac.jp/" target="_blank">Sugiyama-Yokoya-Ishida Lab</a>, supervised by professor <a href="https://www.ms.k.u-tokyo.ac.jp/sugi/" target="_blank">Masashi Sugiyama</a>. Meanwhile, I worked as a research assistant on <a href="https://beyondai.jp/" target="_blank">Beyond AI Institution</a>.</p>
+        <p>I got my M.Eng. degree in <a href="https://www.nju.edu.cn/en/7f/6b/c7136a163691/page.psp" target="_blank">Computer Science and Technology</a> in June 2021 from <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> as a member of <a href="http://www.lamda.nju.edu.cn/" target="_blank">LAMDA</a> Group, supervised by professor <a href="https://cs.nju.edu.cn/zhouzh/" target="_blank">Zhi-Hua Zhou</a> and professor <a href="http://www.lamda.nju.edu.cn/jiangy/" target="_blank">Yuan Jiang</a>.</p>
+        <p>I got my B.Eng. degree in <a href="http://hangkong.nwpu.edu.cn//" target="_blank">Aircraft Design and Engineering</a> in June 2018 from <a href="https://www.nwpu.edu.cn/" target="_blank">Northwestern Polytechnical University</a>. In the same year, I was admitted to study for a M.Sc degree in <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> without entrance examination.</p>
 
-    <!-- Biography + Research Interests -->
-    <div id="biography" class="section">
-      <h2>Biography</h2>
-      <p>Currently I am a postdoctoral researcher in the Imperfect Information Learning Team at <a href="https://www.riken.jp/en/research/labs/aip/" target="_blank">RIKEN Center for Advanced Intelligence Project (AIP)</a>, led by professor <a href="https://www.ms.k.u-tokyo.ac.jp/sugi/" target="_blank">Masashi Sugiyama</a>.</p>
-      <p>I got my Ph.D. degree in <a href="https://www.k.u-tokyo.ac.jp/complex/index_e.html">Department of Complexity Science and Engineering</a> in September 2024 from <a href="https://www.u-tokyo.ac.jp/en/" target="_blank">The University of Tokyo</a> as a member of <a href="http://www.ms.k.u-tokyo.ac.jp/" target="_blank">Sugiyama-Yokoya-Ishida Lab</a>, supervised by professor <a href="https://www.ms.k.u-tokyo.ac.jp/sugi/" target="_blank">Masashi Sugiyama</a>. Meanwhile, I worked as a research assistant on <a href="https://beyondai.jp/" target="_blank">Beyond AI Institution</a>.</p>
-      <p>I got my M.Eng. degree in <a href="https://www.nju.edu.cn/en/7f/6b/c7136a163691/page.psp" target="_blank">Computer Science and Technology</a> in June 2021 from <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> as a member of <a href="http://www.lamda.nju.edu.cn/" target="_blank">LAMDA</a> Group, supervised by professor <a href="https://cs.nju.edu.cn/zhouzh/" target="_blank">Zhi-Hua Zhou</a> and professor <a href="http://www.lamda.nju.edu.cn/jiangy/" target="_blank">Yuan Jiang</a>.</p>
-      <p>I got my B.Eng. degree in <a href="http://hangkong.nwpu.edu.cn//" target="_blank">Aircraft Design and Engineering</a> in June 2018 from <a href="https://www.nwpu.edu.cn/" target="_blank">Northwestern Polytechnical University</a>. In the same year, I was admitted to study for a M.Sc degree in <a href="http://www.nju.edu.cn/" target="_blank">Nanjing University</a> without entrance examination.</p>
-
-      <h3>Research Interests</h3>
-      <ul>
-        <li>Reward Modeling in RL and RLHF;</li>
-        <li>Reinforcement Learning &amp; Imitation Learning;</li>
-        <li>Learning with Weak Supervision.</li>
-      </ul>
+        <h3>Research Interests</h3>
+        <ul>
+          <li>Reward Modeling in RL and RLHF</li>
+          <li>Reinforcement Learning &amp; Imitation Learning</li>
+          <li>Learning with Weak Supervision</li>
+        </ul>
+      </section>
     </div>
 
     <!-- News -->
-    <div id="news" class="section">
+    <section id="news" class="section">
       <h2>News</h2>
-      <p>2025. 05: 🌐I will attend the workshop between the University of Melbourne and RIKEN-AIP in Melbourne on July 3-4.</p>
-      <p>2025. 05: 🌐I will attend the workshop between the University of Sydney and RIKEN-AIP in Sydney on July 7-8.</p>
-      <p>2025. 05: 🎉Our paper “Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains” is accepted by RLC 2025.</p>
-      <p>2025. 03: 📑Our recent work "UC-MOA: Utility-Conditioned Multi-Objective Alignment for Distributional Pareto-Optimality" is on <a href="https://arxiv.org/pdf/2503.10669">arxiv</a>.</p>
-      <p>2025. 02: 🏫I will visit UAlbany on March 29-30.</p>
-      <p>2025. 02: 💬I will have a talk at Mila “Reward Modeling in Reinforcement and Imitation Learning: Overcoming Challenges of Dimensionality, Imperfection, and Uncertainty” in Montreal on March 28.</p>
-    </div> 
+      <p>2025. 05: 🌐 I will attend the workshop between the University of Melbourne and RIKEN-AIP in Melbourne on July 3–4.</p>
+      <p>2025. 05: 🌐 I will attend the workshop between the University of Sydney and RIKEN-AIP in Sydney on July 7–8.</p>
+      <p>2025. 05: 🎉 Our paper “Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains” is accepted by RLC 2025.</p>
+      <p>2025. 03: 📑 Our recent work "UC-MOA: Utility-Conditioned Multi-Objective Alignment for Distributional Pareto-Optimality" is on <a href="https://arxiv.org/pdf/2503.10669">arXiv</a>.</p>
+      <p>2025. 02: 🏫 I will visit UAlbany on March 29–30.</p>
+      <p>2025. 02: 💬 I will have a talk at Mila “Reward Modeling in Reinforcement and Imitation Learning: Overcoming Challenges of Dimensionality, Imperfection, and Uncertainty” in Montreal on March 28.</p>
+    </section>
 
     <!-- Talks -->
-    <div id="talks" class="section">
+    <section id="talks" class="section">
       <h2>Invited Talks</h2>
       <p>2025/3/28. <b>Reward Modeling in Reinforcement and Imitation Learning: Overcoming Challenges of Dimensionality, Imperfection, and Uncertainty</b>. Mila.</p>
       <p>2025/3/18. <b>Reward Modeling in Reinforcement and Imitation Learning: Overcoming Challenges of Dimensionality, Imperfection, and Uncertainty</b>. UCLA.</p>
       <p>2023/6/7. <b>Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning</b>. AI TIME.</p>
       <p>2022/1/11. <b>Imitation Learning from Pixel-Level Demonstrations by HashReward</b>. RLChina.</p>
-    </div>
+    </section>
 
-    <!-- Works (Preprints, Publications, Patents) -->
-    <div id="works" class="section">
+    <!-- Works -->
+    <section id="works" class="section">
       <h2>Preprints (* denotes equal contributions)</h2>
-      <p>Jiansong Wan, Chengming Zhou, Jinkua Liu, Xiangge Huang, Xiaoyu Chen, Xiaohan Yi, Qisen Yang, Baiting Zhu, <b>Xin-Qiang Cai</b>, Lixing Liu, Rushuai Yang, Chuheng Zhang, Sherif Abdelfattah, Hayong Shin, Pushi Zhang, Li Zhao, Jiang Bian. PIG-Nav: Key Insights for Pretrained Image Goal Navigation Models. In: Arxiv. [<a href="https://arxiv.org/pdf/2507.17220">arxiv</a>]</p>
-      <p>Zelei Cheng*, <b>Xin-Qiang Cai*</b>, Yuting Tang, Pushi Zhang, Boming Yang, Masashi Sugiyama, Xingyu Xing. UC-MOA: Utility-Conditioned Multi-Objective Alignment for Distributional Pareto-Optimality. In: Arxiv. [<a href="https://arxiv.org/pdf/2503.10669">arxiv</a>]</p>
-    
+      <p>Jiansong Wan, Chengming Zhou, Jinkua Liu, Xiangge Huang, Xiaoyu Chen, Xiaohan Yi, Qisen Yang, Baiting Zhu, <b>Xin-Qiang Cai</b>, Lixing Liu, Rushuai Yang, Chuheng Zhang, Sherif Abdelfattah, Hayong Shin, Pushi Zhang, Li Zhao, Jiang Bian. PIG-Nav: Key Insights for Pretrained Image Goal Navigation Models. In: arXiv. [<a href="https://arxiv.org/pdf/2507.17220">arXiv</a>]</p>
+      <p>Zelei Cheng*, <b>Xin-Qiang Cai*</b>, Yuting Tang, Pushi Zhang, Boming Yang, Masashi Sugiyama, Xingyu Xing. UC-MOA: Utility-Conditioned Multi-Objective Alignment for Distributional Pareto-Optimality. In: arXiv. [<a href="https://arxiv.org/pdf/2503.10669">arXiv</a>]</p>
+
       <h2>Publications (* denotes equal contributions)</h2>
-      <p>Soichiro Nishimori, <b>Xin-Qiang Cai</b>, Johannes Ackermann, Masashi Sugiyama. Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains. <b>Proceedings of the second Reinforcement Learning Conference (RLC'25)</b>. To appear. [<a href="https://arxiv.org/abs/2404.07465">arxiv</a>]</p>
+      <p>Soichiro Nishimori, <b>Xin-Qiang Cai</b>, Johannes Ackermann, Masashi Sugiyama. Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains. <b>Proceedings of the second Reinforcement Learning Conference (RLC'25)</b>. To appear. [<a href="https://arxiv.org/abs/2404.07465">arXiv</a>]</p>
       <p>Jing-Cheng Pang, Nan Tang, Kaiyuan Li, Yuting Tang, <b>Xin-Qiang Cai</b>, Zhen-Yu Zhang, Gang Niu, Masashi Sugiyama, Yang Yu. Learning View-invariant World Models for Visual Robotic Manipulation. In: <b>Proceedings of the Thirteenth International Conference on Learning Representations (ICLR'25)</b>, To appear.</p>
-      <p>Zelei Cheng, Xian Wu, Jiahao Yu, Shuo Han, <b>Xin-Qiang Cai</b>, Xinyu Xing. Soft-Label Integration for Robust Toxicity Classification. In: <b>Proceedings of the Thirty-eighth Conference on Neural Information Processing Systems (NeurIPS'24)</b>, Vancouver, Canada, Dec. 10-15, 2024. [<a href="https://arxiv.org/abs/2410.14894">arxiv</a>] [<a href="https://github.com/chengzelei/crowdsource_toxicity_classification">code</a>] [<a href="./files/softlabel-neurips24.pdf">paper</a>]</p>
-      <p>Yuting Tang*, <b>Xin-Qiang Cai*</b>, Yao-Xiang Ding, Qiyu Wu, Guoqing Liu, Masashi Sugiyama. Reinforcement Learning from Bagged Reward. In: <b>Proceedings of the 41st International Conference on Machine Learning (ICML'24), Aligning Reinforcement Learning Experimentalists and Theorists (ARLET) workshop</b>, Vienna, Austria, Jul. 21-27, 2024. [<a href="https://arxiv.org/abs/2402.03771">arxiv</a>]</p>
-      <p>Xingyu Song, Zhan Li, Shi Chen, <b>Xin-Qiang Cai</b>, Kazuyuki Demachi. An Animation-based Augmentation Approach for Action Recognition from Discontinuous Video. In: <b>Proceedings of the 27th European Conference on Artificial Intelligence (ECAI'24)</b>, Santiago de Compostela, Spain, Oct. 19-24, 2024. [<a href="https://arxiv.org/abs/2404.06741">arxiv</a>]</p>
-      <p>Kaiyan Zhao, Qiyu Wu, <b>Xin-Qiang Cai</b>, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. In: <b>Proceedings of the 8th Conference of the European Chapter of the Association for Computational Linguistics (EACL'24)</b>, Malta, Mar. 17-22, 2024. [<a href="https://arxiv.org/abs/2309.08929">arxiv</a>]</p>
-      <p>Pushi Zhang*, Baiting Zhu*, <b>Xin-Qiang Cai*</b>, Li Zhao, Masashi Sugiyama, Jiang Bian. IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, <a href="https://www.robot-learning.ml/2023/">6th Robot Learning Workshop</a>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/IG-neurips23.pdf">paper</a>] [<a href="https://openreview.net/forum?id=SjNlIHY8db">openreview</a>]</p>
-      <p><b>Xin-Qiang Cai</b>, Yu-Jie Zhang, Chao-Kai Chiang, Masashi Sugiyama. Imitation Learning from Vague Feedback. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/VPIL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-VPIL.html">bibtex</a>]</p>
-      <p><b>Xin-Qiang Cai</b>, Pushi Zhang, Li Zhao, Jiang Bian, Masashi Sugiyama, Ashley Juan Llorens. Distributional Pareto-Optimal Multi-Objective Reinforcement Learning. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10-16, 2023. [<a href="./files/DPMORL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-DPMORL.html">bibtex</a>]</p>
-      <p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Zi-Xuan Chen, Yuan Jiang, Masashi Sugiyama, Zhi-Hua Zhou. Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning. In: <b>Proceedings of the Eleventh International Conference on Learning Representations (ICLR'23) (spotlight)</b>, Kigali, Rwanda, May 1-5, 2023. [<a href="https://openreview.net/forum?id=3ULaIHxn9u7">openreview</a>] [<a href="./files/HOIL-iclr23.pdf">paper</a>] [<a href="./bib/2023-ICLR-HOIL.html">bibtex</a>]</p>
-      <p>Zi-Xuan Chen*, <b>Xin-Qiang Cai*</b>, Yuan Jiang, Zhi-Hua Zhou. Anomaly Guided Policy Learning from Imperfect Demonstrations. In: <b>Proceedings of the 21st International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'22) (oral)</b>, Auckland, New Zealand, May 9-13, 2022. Page: 244-252. [<a href="./files/AGPO-aamas22.pdf">paper</a>] [<a href="./bib/2022-AAMAS-AGPO.html">bibtex</a>]</p>
-      <p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Yuan Jiang, Zhi-Hua Zhou. Imitation Learning from Pixel-Level Demonstrations by HashReward. In: <b>Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'21) (oral)</b>, online, May 3-7, 2021. Page: 279–287. [<a href="http://www.lamda.nju.edu.cn/code_HashReward.ashx">code</a>] [<a href="./files/hashreward-aamas21.pdf">paper</a>] [<a href="./bib/2021-AAMAS-HashReward.html">bibtex</a>]</p>
-      <p><b>Xin-Qiang Cai</b>, Peng Zhao, Kai Ming Ting, Xin Mu, Yuan Jiang. Nearest Neighbor Ensembles: An Effective Method for Difficult Problems in Streaming Classification with Emerging New Classes. In: <b>Proceedings of the 19th IEEE International Conference on Data Mining (ICDM'19)</b>, Beijing, China, Nov. 8-11, 2019. Page: 970-975. [<a href="./files/SENNE_code.zip">code</a>] [<a href="./files/SENNE.pdf">paper</a>] [<a href="./bib/2019-ICDM-SENNE.html">bibtex</a>]</p>
+      <p>Zelei Cheng, Xian Wu, Jiahao Yu, Shuo Han, <b>Xin-Qiang Cai</b>, Xinyu Xing. Soft-Label Integration for Robust Toxicity Classification. In: <b>Proceedings of the Thirty-eighth Conference on Neural Information Processing Systems (NeurIPS'24)</b>, Vancouver, Canada, Dec. 10–15, 2024. [<a href="https://arxiv.org/abs/2410.14894">arXiv</a>] [<a href="https://github.com/chengzelei/crowdsource_toxicity_classification">code</a>] [<a href="./files/softlabel-neurips24.pdf">paper</a>]</p>
+      <p>Yuting Tang*, <b>Xin-Qiang Cai*</b>, Yao-Xiang Ding, Qiyu Wu, Guoqing Liu, Masashi Sugiyama. Reinforcement Learning from Bagged Reward. In: <b>Proceedings of the 41st International Conference on Machine Learning (ICML'24), ARLET workshop</b>, Vienna, Austria, Jul. 21–27, 2024. [<a href="https://arxiv.org/abs/2402.03771">arXiv</a>]</p>
+      <p>Xingyu Song, Zhan Li, Shi Chen, <b>Xin-Qiang Cai</b>, Kazuyuki Demachi. An Animation-based Augmentation Approach for Action Recognition from Discontinuous Video. In: <b>Proceedings of the 27th European Conference on Artificial Intelligence (ECAI'24)</b>, Santiago de Compostela, Spain, Oct. 19–24, 2024. [<a href="https://arxiv.org/abs/2404.06741">arXiv</a>]</p>
+      <p>Kaiyan Zhao, Qiyu Wu, <b>Xin-Qiang Cai</b>, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. In: <b>Proceedings of the 8th Conference of the European Chapter of the Association for Computational Linguistics (EACL'24)</b>, Malta, Mar. 17–22, 2024. [<a href="https://arxiv.org/abs/2309.08929">arXiv</a>]</p>
+      <p>Pushi Zhang*, Baiting Zhu*, <b>Xin-Qiang Cai*</b>, Li Zhao, Masashi Sugiyama, Jiang Bian. IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, <a href="https://www.robot-learning.ml/2023/">6th Robot Learning Workshop</a>, New Orleans, US, Dec. 10–16, 2023. [<a href="./files/IG-neurips23.pdf">paper</a>] [<a href="https://openreview.net/forum?id=SjNlIHY8db">openreview</a>]</p>
+      <p><b>Xin-Qiang Cai</b>, Yu-Jie Zhang, Chao-Kai Chiang, Masashi Sugiyama. Imitation Learning from Vague Feedback. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10–16, 2023. [<a href="./files/VPIL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-VPIL.html">bibtex</a>]</p>
+      <p><b>Xin-Qiang Cai</b>, Pushi Zhang, Li Zhao, Jiang Bian, Masashi Sugiyama, Ashley Juan Llorens. Distributional Pareto-Optimal Multi-Objective Reinforcement Learning. In: <b>Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (NeurIPS'23)</b>, New Orleans, US, Dec. 10–16, 2023. [<a href="./files/DPMORL-neurips23.pdf">paper</a>] [<a href="./bib/2023-NeurIPS-DPMORL.html">bibtex</a>]</p>
+      <p><b>Xin-Qiang Cai</b>, Yao-Xiang Ding, Zi-Xuan Chen, Yuan Jiang, Masashi Sugiyama, Zhi-Hua Zhou. Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning. In: <b>Proceedings of the Eleventh International Conference on Learning Representations (ICLR'23) (spotlight)</b>, Kigali, Rwanda, May 1–5, 2023. [<a href="https://openreview.net/forum?id=3ULaIHxn9u7">openreview</a>] [<a href="./files/HOIL-iclr23.pdf">paper</a>] [<a href="./bib/2023-ICLR-HOIL.html">bibtex</a>]</p>
+      <p>Zi-Xuan Chen*, <b>Xin-Qiang Cai*</b>, Yuan Jiang, Zhi-Hua Zhou. Anomaly Guided Policy Learning from Imperfect Demonstrations. In: <b>Proceedings of the 21st International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS'22) (oral)</b>, Auckland, New Zealand, May 9–13, 2022. Page: 244–252. [<a href="./files/AGPO-aamas22.pdf">paper</a>] [<a href="./bib/2022-AAMAS-AGPO.html">bibtex</a>]</p>
 
       <h2>Patent</h2>
       <ul>
         <li>一种摄像器材记录的视频图像数据的高维模仿学习方法. Patent No. 202011450396.1, 2020.</li>
       </ul>
-    </div>
+    </section>
 
     <!-- Services -->
-    <div id="services" class="section">
+    <section id="services" class="section">
       <h2>Service</h2>
       <h3>Conference</h3>
       <ul>
@@ -425,16 +409,16 @@
       </ul>
       <h3>Journal</h3>
       <ul>
-        <li><a href="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385" target="_blank">IEEE Transactions on Neural Networks and Learning Systems(TNNLS)</a></li>
+        <li><a href="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385" target="_blank">IEEE Transactions on Neural Networks and Learning Systems (TNNLS)</a></li>
       </ul>
-    </div>
+    </section>
 
-    <!-- Awards & Honors -->
-    <div id="awards" class="section">
+    <!-- Awards -->
+    <section id="awards" class="section">
       <h2>Awards &amp; Honors</h2>
       <ul>
         <li>Star of Tomorrow Award. Microsoft Research Asia (MSRA). 2024</li>
-        <li><a href="https://www.jsps.go.jp/" target="_blank">Japan Society for the Promotion of Science (JSPS, 日本学術振興会) DC2 Fellowship</a>. 2023</li>
+        <li><a href="https://www.jsps.go.jp/" target="_blank">Japan Society for the Promotion of Science (JSPS, 日本学術振兴会) DC2 Fellowship</a>. 2023</li>
         <li>MSRA Collaborative Research Program Fellowship (D-CORE 2022). 2022</li>
         <li><a href="https://spring-gx-appl.adm.s.u-tokyo.ac.jp/en/" target="_blank">SPRING GX Fellowship</a>. 2021</li>
         <li>Excellent Graduate of Nanjing University. 2021</li>
@@ -460,265 +444,338 @@
         <li>The ACM-ICPC Asia Regional Contest, China-Final, Bronze Medal. 2015</li>
         <li>Contemporary Undergraduate Mathematical Contest in Modeling, Second Prize. 2015</li>
         <li>The ACM-ICPC Asia Regional Contest, Shaanxi Provincial Contest, Silver Medal. 2015</li>
-        <li>National Scholarship. 2015-2016</li>
-        <li>National Scholarship. 2014-2015</li>
+        <li>National Scholarship. 2015–2016</li>
+        <li>National Scholarship. 2014–2015</li>
       </ul>
-    </div>
+    </section>
 
-    <!-- Correspondence (no button) -->
-    <div id="correspondence" class="section">
+    <!-- Correspondence -->
+    <section id="correspondence" class="section">
       <h2>Correspondence</h2>
       <p>Email: xinqiang.cai@riken.jp, jkrsndivide@gmail.com</p>
-    </div>
+    </section>
   </main>
 
-  <!-- 页脚 -->
   <footer>
     <p>© 2025 Xin-Qiang Cai</p>
   </footer>
 
   <script>
   (() => {
-    // --- DOM Elements ---
+    /** =========================
+     *  Canvas Neurofield 背景
+     *  ========================= */
     const canvas = document.getElementById('interactive-bg');
     const ctx = canvas.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    let W = 0, H = 0, T = 0;
+
+    function getCanvasColors() {
+      const cs = getComputedStyle(document.documentElement);
+      return {
+        primary: (cs.getPropertyValue('--primary-rgb') || '0,95,115').trim(),
+        accent: (cs.getPropertyValue('--accent-rgb') || '10,147,150').trim(),
+        ink: (cs.getPropertyValue('--ink-rgb') || '0,18,25').trim(),
+        bg: (cs.getPropertyValue('--canvas-bg-rgb') || '245,247,248').trim()
+      };
+    }
+    let COLORS = getCanvasColors();
+
+    const NODE_COUNT = 110;
+    const LINK_RADIUS = 140;
+    const nodes = [];
+    const equations = [
+      'argmax_π  E[∑ γ^t r_t]',
+      'min_θ  E[(R − f_θ)^2]',
+      '∇·(σ∇V) = 0',
+      'H(s,a) = −∑ p log p',
+      'Q^π(s,a) = r + γ E[Q^π(s′,a′)]',
+      'KL(p‖q) = ∑ p log(p/q)'
+    ].map(text => ({ text, x: 0, y: 0, vx: 0, vy: 0, a: Math.random()*0.3 + 0.05 }));
+
+    function resize() {
+      W = Math.floor(innerWidth * DPR);
+      H = Math.floor(innerHeight * DPR);
+      canvas.width = W; canvas.height = H;
+      canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px';
+    }
+
+    function initNodes() {
+      nodes.length = 0;
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          pulse: Math.random() * Math.PI * 2
+        });
+      }
+      equations.forEach((e, i) => {
+        e.x = (i + 1) / (equations.length + 1) * W;
+        e.y = (0.25 + 0.5 * Math.random()) * H;
+        e.vx = (Math.random() - 0.5) * 0.15;
+        e.vy = (Math.random() - 0.5) * 0.15;
+      });
+    }
+
+    // Mouse + 风影响
+    const mouse = { x: -1e9, y: -1e9 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX * DPR;
+      mouse.y = e.clientY * DPR;
+    });
+    window.addEventListener('mouseleave', () => { mouse.x = -1e9; mouse.y = -1e9; });
+
+    function flow(x, y, t) {
+      const s = 0.0009;        // 空间频率
+      const tt = t * 0.0003;   // 时间频率
+      const fx = Math.sin(y * s + tt) * 0.25 + Math.sin((x + y) * s * 0.6) * 0.15;
+      const fy = Math.cos(x * s * 1.1 + tt) * 0.25 + Math.sin((x - y) * s * 0.5) * 0.1;
+      return { x: fx, y: fy };
+    }
+
+    function step(ts) {
+      T = ts || 0;
+      ctx.clearRect(0, 0, W, H);
+
+      /* 先铺一层底色，暗色下为深色，浅色下为淡灰 */
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgb(' + COLORS.bg + ')';
+      ctx.fillRect(0, 0, W, H);
+
+      // 再叠加细微色彩渐变
+      const grad = ctx.createLinearGradient(0, 0, W, H);
+      grad.addColorStop(0, 'rgba(' + COLORS.primary + ',0.12)');
+      grad.addColorStop(1, 'rgba(' + COLORS.accent + ',0.08)');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
+
+      // Update & draw nodes
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const f = flow(n.x, n.y, T);
+        const dx = n.x - mouse.x, dy = n.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        const repel = dist < 160 * DPR ? (160 * DPR - dist) / (160 * DPR) : 0;
+        n.vx += f.x * 0.6 - (dx / (dist + 1)) * repel * 0.4;
+        n.vy += f.y * 0.6 - (dy / (dist + 1)) * repel * 0.4;
+        n.x += n.vx; n.y += n.vy;
+        n.vx *= 0.97; n.vy *= 0.97;
+        if (n.x < -20) n.x = W + 20; if (n.x > W + 20) n.x = -20;
+        if (n.y < -20) n.y = H + 20; if (n.y > H + 20) n.y = -20;
+
+        n.pulse += 0.02;
+        const r = 1.1 + Math.sin(n.pulse) * 0.9;
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(' + COLORS.primary + ',0.75)'; /* 暗色下依然亮色点 */
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Links
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y; const d2 = dx*dx + dy*dy;
+          if (d2 < (140 * DPR) * (140 * DPR)) {
+            const d = Math.sqrt(d2);
+            const t = 1 - d / (140 * DPR);
+            ctx.beginPath();
+            ctx.lineWidth = 1.2 * t * DPR;
+            ctx.strokeStyle = 'rgba(' + COLORS.accent + ',' + (0.28 * t + 0.06) + ')';
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+
+      // Equations（暗色下用浅色墨）
+      ctx.globalCompositeOperation = 'source-over';
+      equations.forEach((e) => {
+        const f = flow(e.x, e.y, T);
+        e.vx += f.x * e.a * 0.5; e.vy += f.y * e.a * 0.5;
+        e.x += e.vx; e.y += e.vy; e.vx *= 0.985; e.vy *= 0.985;
+        if (e.x < -200) e.x = W + 200; if (e.x > W + 200) e.x = -200;
+        if (e.y < -50) e.y = H + 50; if (e.y > H + 50) e.y = -50;
+        ctx.save();
+        ctx.translate(e.x, e.y);
+        ctx.font = (14 * DPR) + 'px ui-monospace, Menlo, Consolas, Monaco, monospace';
+        ctx.fillStyle = 'rgba(' + COLORS.ink + ',0.12)';
+        ctx.fillText(e.text, 0, 0);
+        ctx.restore();
+      });
+
+      requestAnimationFrame(step);
+    }
+
+    function start() { resize(); initNodes(); step(0); }
+    window.addEventListener('resize', () => { resize(); initNodes(); });
+    start();
+
+    /** =========================
+     *  数据挂件（地理/天气/季节）
+     *  ========================= */
     const mainContent = document.querySelector('main');
     const dataWidget = document.createElement('div');
     dataWidget.id = 'data-widget';
     dataWidget.innerHTML = `<p id="widget-status">Connecting to your world...</p><p class="blessing-message"></p>`;
     document.body.appendChild(dataWidget);
 
-    // --- Core Parameters ---
-    const PARTICLE_COUNT = 80; // Quality over quantity for detailed shapes
-    const PARTICLE_BASE_COLOR = 'rgba(0, 95, 115, 0.7)';
-    const MAX_SPEED = 1.2;
-    const MOUSE_RADIUS = 150;
-    const LAZY_SCROLL_FACTOR = 0.08;
-
-    // --- Global State ---
-    let width, height, particles;
-    let liveWindForce = { x: 0, y: 0 };
-    const mouse = { x: null, y: null };
+    let widgetTargetY = 150, widgetCurrentY = 150; const LAZY_SCROLL = 0.08;
     let contentRect = { left: 0, right: 0 };
-    let widgetTargetY = 150, widgetCurrentY = 150;
-    // 【New】Default season before data is fetched
-    let currentSeason = 'summer'; 
 
-    // =================================================================
-    // --- 【ULTIMATE】 Particle Class: A Master of Disguise ---
-    // =================================================================
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.pos = { x: Math.random() * width, y: Math.random() * height };
-        this.vel = { x: (Math.random() - 0.5), y: (Math.random() - 0.5) };
-        this.acc = { x: 0, y: 0 };
-        this.type = currentSeason;
-        
-        // Type-specific physics and appearance
-        this.size = Math.random() * 5 + 3;
-        this.rotationAngle = Math.random() * Math.PI * 2;
-        this.opacity = Math.random() * 0.5 + 0.4;
-
-        switch (this.type) {
-          case 'spring': // Sakura
-            this.rotationSpeed = (Math.random() - 0.5) * 0.03;
-            break;
-          case 'summer': // Dandelion
-            this.rotationSpeed = (Math.random() - 0.5) * 0.01;
-            break;
-          case 'autumn': // Maple Leaf
-            this.rotationSpeed = (Math.random() - 0.5) * 0.05;
-            this.size += 3; // Leaves are bigger
-            break;
-          case 'winter': // Snowflake
-            this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-            this.swayAngle = Math.random() * Math.PI * 2;
-            this.swaySpeed = Math.random() * 0.02;
-            break;
-        }
-      }
-
-      applyForce(force) { this.acc.x += force.x; this.acc.y += force.y; }
-
-      update() {
-        // Add unique physics based on type
-        if (this.type === 'winter') {
-          this.swayAngle += this.swaySpeed;
-          this.acc.x += Math.sin(this.swayAngle) * 0.005; // Gentle wobble
-        }
-        this.acc.y += 0.001; // A tiny bit of gravity
-
-        this.vel.x += this.acc.x; this.vel.y += this.acc.y;
-        const speed = Math.sqrt(this.vel.x**2 + this.vel.y**2);
-        if (speed > MAX_SPEED) { this.vel.x = (this.vel.x / speed) * MAX_SPEED; this.vel.y = (this.vel.y / speed) * MAX_SPEED; }
-        this.pos.x += this.vel.x; this.pos.y += this.vel.y;
-        this.rotationAngle += this.rotationSpeed;
-        this.acc = { x: 0, y: 0 };
-      }
-
-      edges() {
-        if (this.vel.x > 0 && this.pos.x > width + this.size * 2) this.reset();
-        if (this.vel.x < 0 && this.pos.x < -this.size * 2) this.reset();
-        if (this.vel.y > 0 && this.pos.y > height + this.size * 2) this.reset();
-        if (this.vel.y < 0 && this.pos.y < -this.size * 2) this.reset();
-      }
-
-      draw(ctx) {
-        ctx.save();
-        ctx.translate(this.pos.x, this.pos.y);
-        ctx.rotate(this.rotationAngle);
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = PARTICLE_BASE_COLOR;
-        ctx.strokeStyle = PARTICLE_BASE_COLOR;
-
-        switch (this.type) {
-          case 'spring': this.drawSakura(ctx); break;
-          case 'summer': this.drawDandelion(ctx); break;
-          case 'autumn': this.drawMaple(ctx); break;
-          case 'winter': this.drawSnowflake(ctx); break;
-        }
-        ctx.restore();
-      }
-      
-      // Drawing functions for each season
-      drawSakura(ctx) {
-        ctx.beginPath();
-        for (let i = 0; i < 5; i++) {
-          ctx.moveTo(0, 0);
-          ctx.quadraticCurveTo(this.size, this.size, this.size * 2, 0);
-          ctx.quadraticCurveTo(this.size, -this.size, 0, 0);
-          ctx.rotate((Math.PI * 2) / 5);
-        }
-        ctx.fill();
-      }
-      drawDandelion(ctx) {
-        ctx.lineWidth = 0.5;
-        for (let i = 0; i < 8; i++) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(this.size * 2, 0); ctx.stroke(); ctx.rotate((Math.PI * 2) / 8); }
-        ctx.beginPath(); ctx.arc(0, 0, 1, 0, Math.PI * 2); ctx.fill();
-      }
-      drawMaple(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(this.size * 0.5, -this.size * 1.5); ctx.lineTo(this.size * 1.5, -this.size * 1.2);
-        ctx.lineTo(this.size * 1.2, -this.size * 2.5); ctx.lineTo(this.size * 2.5, -this.size * 2.2);
-        ctx.lineTo(this.size, 0);
-        ctx.lineTo(this.size * 2.5, this.size * 2.2); ctx.lineTo(this.size * 1.2, this.size * 2.5);
-        ctx.lineTo(this.size * 1.5, this.size * 1.2); ctx.lineTo(this.size * 0.5, this.size * 1.5);
-        ctx.closePath();
-        ctx.fill();
-      }
-      drawSnowflake(ctx) {
-        ctx.lineWidth = 1.5;
-        for (let i = 0; i < 6; i++) {
-          ctx.beginPath();
-          ctx.moveTo(0, 0); ctx.lineTo(0, this.size * 1.5);
-          ctx.moveTo(0, this.size * 0.5); ctx.lineTo(this.size * 0.5, this.size);
-          ctx.moveTo(0, this.size * 0.5); ctx.lineTo(-this.size * 0.5, this.size);
-          ctx.stroke();
-          ctx.rotate(Math.PI / 3);
-        }
+    function updateLayout() {
+      const rect = mainContent.getBoundingClientRect();
+      const left = rect.left + window.scrollX;
+      const right = rect.right + window.scrollX;
+      contentRect.left = left; contentRect.right = right;
+      const desiredLeft = right + 20;
+      const fits = desiredLeft + 280 < window.scrollX + window.innerWidth;
+      if (fits) {
+        dataWidget.classList.remove('is-docked');
+        dataWidget.style.left = desiredLeft + 'px';
+      } else {
+        dataWidget.classList.add('is-docked');
       }
     }
-
-    // =================================================================
-    // --- 【New】 Seasonal Logic ---
-    // =================================================================
-    function getSeason(latitude, month) {
-      // Offset month for Southern Hemisphere
-      if (latitude < 0) {
-        month = (month + 6) % 12;
+    function animateWidget() {
+      widgetCurrentY += (widgetTargetY - widgetCurrentY) * LAZY_SCROLL;
+      if (!dataWidget.classList.contains('is-docked')) {
+        dataWidget.style.top = widgetCurrentY + 'px';
       }
-      // Determine season based on Northern Hemisphere months
-      if (month >= 2 && month <= 4) return 'spring'; // Mar, Apr, May
-      if (month >= 5 && month <= 7) return 'summer'; // Jun, Jul, Aug
-      if (month >= 8 && month <= 10) return 'autumn'; // Sep, Oct, Nov
-      return 'winter'; // Dec, Jan, Feb
+      requestAnimationFrame(animateWidget);
+    }
+    window.addEventListener('scroll', () => { widgetTargetY = window.scrollY + 150; });
+    window.addEventListener('resize', updateLayout);
+    updateLayout(); animateWidget();
+
+    function getSeason(lat, month) {
+      if (lat < 0) month = (month + 6) % 12; // 南半球 +6 月
+      if (month >= 2 && month <= 4) return 'spring';
+      if (month >= 5 && month <= 7) return 'summer';
+      if (month >= 8 && month <= 10) return 'autumn';
+      return 'winter';
+    }
+    function getDirection(angle) {
+      const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+      return dirs[Math.round(angle / 22.5) % 16];
     }
 
-    // =================================================================
-    // --- Data Fetching & Core Logic ---
-    // =================================================================
     async function fetchWorldData() {
       try {
         const geoResponse = await fetch('https://ipapi.co/json/');
         if (!geoResponse.ok) throw new Error('Geolocation failed');
         const geoData = await geoResponse.json();
         const { latitude, longitude, city, country_name } = geoData;
+        const season = getSeason(latitude, new Date().getMonth());
 
-        // 【New】 Determine season and update particles
-        const month = new Date().getMonth();
-        currentSeason = getSeason(latitude, month);
-        particles.forEach(p => p.reset()); // Reset existing particles to the new season
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=wind_speed_10m,wind_direction_10m`;
+        const wRes = await fetch(url);
+        if (!wRes.ok) throw new Error('Weather data failed');
+        const wData = await wRes.json();
+        const { wind_speed_10m, wind_direction_10m } = wData.current;
 
-        const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=wind_speed_10m,wind_direction_10m`;
-        const weatherResponse = await fetch(weatherApiUrl);
-        if (!weatherResponse.ok) throw new Error('Weather data failed');
-        const weatherData = await weatherResponse.json();
-        const { wind_speed_10m, wind_direction_10m } = weatherData.current;
-        
+        // 用风向/风速轻微影响背景
         const angleRad = (wind_direction_10m - 90 + 180) * (Math.PI / 180);
-        const forceMagnitude = (wind_speed_10m / 50);
-        liveWindForce = { x: Math.cos(angleRad) * forceMagnitude, y: Math.sin(angleRad) * forceMagnitude };
+        const bias = (wind_speed_10m / 50) * 200 * DPR;
+        mouse.x = (W / 2) + Math.cos(angleRad) * bias;
+        mouse.y = (H / 2) + Math.sin(angleRad) * bias;
 
-        updateWidget(city, country_name, wind_speed_10m, wind_direction_10m, currentSeason);
-
-      } catch (error) {
-        console.error("Failed to fetch real-world data:", error);
         const statusP = document.getElementById('widget-status');
-        statusP.innerHTML = "Could not connect to your world, but the sentiment remains the same.";
+        const seasonName = season[0].toUpperCase() + season.slice(1);
+        statusP.innerHTML = `Welcome from <strong>${city}, ${country_name}</strong>.<br/>The current season is <strong>${seasonName}</strong>, and the wind is <strong>${wind_speed_10m.toFixed(1)} km/h</strong> from the <strong>${getDirection(wind_direction_10m)}</strong>.`;
         const blessingP = dataWidget.querySelector('.blessing-message');
-        blessingP.innerHTML = "Wishing you a wonderful day, wherever you are. ✨";
+        blessingP.innerHTML = 'The neural graph gently drifts with your local breeze — wishing you clarity and happy discoveries today.';
         dataWidget.classList.add('loaded');
+      } catch (e) {
+        console.warn('World data failed', e);
+        const statusP = document.getElementById('widget-status');
+        statusP.innerHTML = 'Could not connect to your world, but the math still flows.';
+        const blessingP = dataWidget.querySelector('.blessing-message');
+        blessingP.innerHTML = 'Wishing you a wonderful day, wherever you are. ✨';
+        dataWidget.classList.add('loaded');
+      } finally {
+        updateLayout();
       }
     }
-    
-    function updateWidget(city, country, speed, direction, season) {
-        const seasonName = season.charAt(0).toUpperCase() + season.slice(1);
-        const statusP = document.getElementById('widget-status');
-        statusP.innerHTML = `Welcome from <strong>${city}, ${country}</strong>.<br>The current season is <strong>${seasonName}</strong>, and the wind is <strong>${speed.toFixed(1)} km/h</strong> from the <strong>${getDirection(direction)}</strong>.`;
-        const blessingP = dataWidget.querySelector('.blessing-message');
-        blessingP.innerHTML = "This animation is gently guided by this breeze, carrying a wish for your happiness. Hope you have a great day.";
-        dataWidget.classList.add('loaded');
-    }
-    function getDirection(angle) { const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']; return directions[Math.round(angle / 22.5) % 16]; }
-
-    // --- Animation & Layout Functions (mostly unchanged) ---
-    function updateLayout() { /* ... This function is unchanged ... */ 
-      width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; const rect = mainContent.getBoundingClientRect(); contentRect.left = rect.left; contentRect.right = rect.right; dataWidget.style.left = `${contentRect.right + 20}px`;
-    }
-    function setup() {
-      updateLayout();
-      particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
-    }
-    function updateParticles() { /* ... This function is unchanged ... */
-        particles.forEach(p => { p.applyForce(liveWindForce); if (mouse.x !== null && (mouse.x < contentRect.left || mouse.x > contentRect.right)) { const dx = p.pos.x - mouse.x; const dy = p.pos.y - mouse.y; const distSq = dx * dx + dy * dy; if (distSq < MOUSE_RADIUS * MOUSE_RADIUS && distSq > 1) { const forceMag = (1 - Math.sqrt(distSq) / MOUSE_RADIUS) * 0.1; p.applyForce({ x: dx * forceMag, y: dy * forceMag }); } } p.update(); p.edges(); });
-    }
-    function draw() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => p.draw(ctx));
-    }
-    function animate() {
-      updateParticles();
-      draw();
-      widgetCurrentY += (widgetTargetY - widgetCurrentY) * LAZY_SCROLL_FACTOR;
-      dataWidget.style.top = `${widgetCurrentY}px`;
-      requestAnimationFrame(animate);
-    }
-    
-    // --- Initialization & Event Listeners ---
-    setup();
-    animate();
     fetchWorldData();
-    window.addEventListener('scroll', () => { widgetTargetY = window.scrollY + 150; });
-    window.addEventListener('resize', () => { setup(); updateLayout(); });
-    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
+    /** =========================
+     *  主题切换（本地记忆 + 系统联动）
+     *  ========================= */
+    const THEME_KEY = 'theme';
+    const rootEl = document.documentElement;
+    const mqDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        rootEl.setAttribute('data-theme', 'dark');
+      } else if (theme === 'light') {
+        rootEl.setAttribute('data-theme', 'light');
+      } else {
+        rootEl.removeAttribute('data-theme'); // 跟随系统
+      }
+      // 重新读取 CSS 变量，刷新画布配色（含反色）
+      COLORS = getCanvasColors();
+
+      // 更新按钮图标
+      const btn = document.getElementById('theme-toggle');
+      const isDark = rootEl.getAttribute('data-theme') === 'dark' || (!rootEl.hasAttribute('data-theme') && mqDark && mqDark.matches);
+      if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === 'light' || saved === 'dark') applyTheme(saved);
+      else applyTheme(null); // 跟随系统
+
+      if (mqDark && mqDark.addEventListener) {
+        mqDark.addEventListener('change', () => {
+          if (!localStorage.getItem(THEME_KEY)) applyTheme(null);
+        });
+      }
+
+      const btn = document.getElementById('theme-toggle');
+      if (btn && !btn._bound) {
+        btn.addEventListener('click', () => {
+          const current = rootEl.getAttribute('data-theme') || (mqDark && mqDark.matches ? 'dark' : 'light');
+          const next = current === 'dark' ? 'light' : 'dark';
+          localStorage.setItem(THEME_KEY, next);
+          applyTheme(next);
+        });
+        btn._bound = true;
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTheme);
+    } else {
+      initTheme();
+    }
+
+    /** =========================
+     *  粘性导航：当前章节高亮
+     *  ========================= */
+    const linkEls = Array.from(document.querySelectorAll('.nav-buttons a.button'));
+    const targets = linkEls
+      .map(a => document.getElementById(a.dataset.target || a.getAttribute('href').slice(1)))
+      .filter(Boolean);
+
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const id = entry.target.getAttribute('id');
+          const link = linkEls.find(a => (a.dataset.target || a.getAttribute('href').slice(1)) === id);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            linkEls.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+          }
+        });
+      }, { root: null, rootMargin: '0px 0px -70% 0px', threshold: 0.2 });
+      targets.forEach(t => obs.observe(t));
+    }
   })();
-</script>
+  </script>
 </body>
 </html>
