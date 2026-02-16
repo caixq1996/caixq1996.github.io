@@ -232,11 +232,22 @@
       display: grid;
       grid-template-columns: 320px 1fr;
       /* Fixed sidebar width on desktop */
-      gap: 30px;
+      gap: 24px;
+      /* Reduced from 30px to match vertical spacing */
       align-items: stretch;
       /* Make Biography/Profile equal height */
       margin-bottom: 24px;
       /* Consistent spacing below grid */
+    }
+
+    /* ... existing code ... */
+
+    /* Specific fix for grid items to prevent overlap/layout issues */
+    .grid .section,
+    .grid .card {
+      height: auto !important;
+      /* Force auto height to fix overlap and sticky behavior */
+      margin-bottom: 0;
     }
 
     @media (max-width: 850px) {
