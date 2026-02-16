@@ -133,7 +133,7 @@
 
     /* Header (Hero) */
     header {
-      padding: 4rem 1rem 3rem;
+      padding: 0.1rem 1rem 1.5rem;
       text-align: center;
       background: radial-gradient(circle at 50% 0%, rgba(10, 147, 150, 0.15), transparent 70%);
       margin-bottom: 0;
@@ -379,11 +379,34 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .dark-mode-fix #works p:hover {
-      background: rgba(255, 255, 255, 0.05);
+    /* Dark Mode specific overrides for Works */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) #works p {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-left: 4px solid transparent;
+        /* Keep same width as light mode */
+      }
+
+      :root:not([data-theme="light"]) #works p:hover {
+        background: rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.1);
+        border-left-color: var(--accent);
+      }
     }
 
-    /* Use :root selector for dark mode specifics if needed inside blocks */
+    :root[data-theme="dark"] #works p {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-left: 4px solid transparent;
+      /* Keep same width as light mode */
+    }
+
+    :root[data-theme="dark"] #works p:hover {
+      background: rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.1);
+      border-left-color: var(--accent);
+    }
 
     /* Footer */
     footer {
@@ -393,6 +416,22 @@
       font-size: 0.9rem;
       opacity: 0.7;
       background: transparent;
+    }
+
+    /* Background canvas + veil */
+    #interactive-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+    }
+
+    .veil {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      /* Base light mode veil */
+      background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4), transparent 80%);
     }
 
     /* Mobile Tweaks */
