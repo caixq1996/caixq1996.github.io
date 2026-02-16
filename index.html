@@ -792,19 +792,18 @@
         T = ts || 0;
         ctx.clearRect(0, 0, W, H);
 
-        /* 先铺一层底色，暗色下为深色，浅色下为淡灰 */
+        /* Background */
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = 'rgb(' + COLORS.bg + ')';
         ctx.fillRect(0, 0, W, H);
 
-        // 再叠加细微色彩渐变
+        // Gradient overlay
         const grad = ctx.createLinearGradient(0, 0, W, H);
         grad.addColorStop(0, 'rgba(' + COLORS.primary + ',0.12)');
         grad.addColorStop(1, 'rgba(' + COLORS.accent + ',0.08)');
         ctx.fillStyle = grad; ctx.fillRect(0, 0, W, H);
 
-        // Update & draw nodes
-        ctx.globalCompositeOperation = 'lighter';
+        // Update nodes
         for (let i = 0; i < nodes.length; i++) {
           const n = nodes[i];
           const f = flow(n.x, n.y, T);
@@ -817,53 +816,69 @@
           n.vx *= 0.97; n.vy *= 0.97;
           if (n.x < -20) n.x = W + 20; if (n.x > W + 20) n.x = -20;
           if (n.y < -20) n.y = H + 20; if (n.y > H + 20) n.y = -20;
-
           n.pulse += 0.02;
-          const r = 1.1 + Math.sin(n.pulse) * 0.9;
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(' + COLORS.primary + ',0.75)'; /* 暗色下依然亮色点 */
-          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-          ctx.fill();
         }
 
+        // Draw nodes (Batch)
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.fillStyle = 'rgba(' + COLORS.primary + ',0.75)';
+        ctx.beginPath();
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          const r = 1.1 + Math.sin(n.pulse) * 0.9;
+          ctx.moveTo(n.x + r, n.y);
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        }
+        ctx.fill();
+
         // Links
+        const threshold = 140 * DPR;
+        const thresholdSq = threshold * threshold;
+        ctx.lineWidth = 1.0 * DPR; // Fixed width for performance validity
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           for (let j = i + 1; j < nodes.length; j++) {
             const b = nodes[j];
-            const dx = a.x - b.x, dy = a.y - b.y; const d2 = dx * dx + dy * dy;
-            if (d2 < (140 * DPR) * (140 * DPR)) {
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < thresholdSq) {
               const d = Math.sqrt(d2);
-              const t = 1 - d / (140 * DPR);
-              ctx.beginPath();
-              ctx.lineWidth = 1.2 * t * DPR;
-              ctx.strokeStyle = 'rgba(' + COLORS.accent + ',' + (0.28 * t + 0.06) + ')';
-              ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+              const t = 1 - d / threshold;
+              // Batching lines by opacity is complex, drawing individually is acceptable if count is low
+              // Optimization: Skip very faint lines
+              if (t > 0.05) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(' + COLORS.accent + ',' + (0.28 * t + 0.06) + ')';
+                ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+              }
             }
           }
         }
 
-        // Equations（暗色下用浅色墨）
+        // Equations (Batch properties)
         ctx.globalCompositeOperation = 'source-over';
+        ctx.font = (14 * DPR) + 'px ui-monospace, Menlo, Consolas, Monaco, monospace';
+        ctx.fillStyle = 'rgba(' + COLORS.ink + ',0.12)';
         equations.forEach((e) => {
           const f = flow(e.x, e.y, T);
           e.vx += f.x * e.a * 0.5; e.vy += f.y * e.a * 0.5;
           e.x += e.vx; e.y += e.vy; e.vx *= 0.985; e.vy *= 0.985;
           if (e.x < -200) e.x = W + 200; if (e.x > W + 200) e.x = -200;
           if (e.y < -50) e.y = H + 50; if (e.y > H + 50) e.y = -50;
-          ctx.save();
-          ctx.translate(e.x, e.y);
-          ctx.font = (14 * DPR) + 'px ui-monospace, Menlo, Consolas, Monaco, monospace';
-          ctx.fillStyle = 'rgba(' + COLORS.ink + ',0.12)';
-          ctx.fillText(e.text, 0, 0);
-          ctx.restore();
+
+          ctx.fillText(e.text, e.x, e.y); // Use xy instead of translate/save/restore
         });
 
         requestAnimationFrame(step);
       }
 
+      // Debounce resize
+      let resizeTimeout;
       function start() { resize(); initNodes(); step(0); }
-      window.addEventListener('resize', () => { resize(); initNodes(); });
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => { resize(); initNodes(); }, 200);
+      });
       start();
 
       /** =========================
