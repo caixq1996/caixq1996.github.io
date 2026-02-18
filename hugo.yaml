@@ -1,0 +1,90 @@
+baseURL: "https://caixq1996.github.io/"
+languageCode: "en-us"
+title: "Xin-Qiang Cai"
+theme: "PaperMod"
+
+enableRobotsTXT: true
+pagination:
+  pagerSize: 8
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+params:
+  env: production
+  title: "Xin-Qiang Cai"
+  description: "Reinforcement Learning, Reward Modeling, and Weak Supervision."
+  author: "Xin-Qiang Cai"
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowCodeCopyButtons: true
+  ShowBreadCrumbs: true
+  ShowToc: false
+  disableSpecial1stPost: true
+  disableThemeToggle: false
+  hideSummary: false
+  ShowRssButtonInSectionTermList: true
+  mainSections:
+    - posts
+  profileMode:
+    enabled: true
+    title: "Xin-Qiang Cai"
+    subtitle: "Postdoctoral Researcher at RIKEN AIP\nResearch: Reinforcement Learning, Reward Modeling, Weak Supervision"
+    imageUrl: "/images/caixq.JPG"
+    imageTitle: "Xin-Qiang Cai"
+    imageWidth: 160
+    imageHeight: 160
+    buttons:
+      - name: CV
+        url: "/CV/en_caixq_cv.pdf"
+      - name: Publications
+        url: "/#publications"
+      - name: Google Scholar
+        url: "https://scholar.google.com/citations?user=JJDqODIAAAAJ"
+      - name: GitHub
+        url: "https://github.com/caixq1996"
+  assets:
+    favicon: "/icons/favicon.ico"
+    favicon16x16: "/icons/favicon-32x32.png"
+    favicon32x32: "/icons/favicon-32x32.png"
+    apple_touch_icon: "/icons/android-chrome-192x192.png"
+
+menu:
+  main:
+    - identifier: publications
+      name: Publications
+      url: /#publications
+      weight: 10
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 20
+    - identifier: files
+      name: Files
+      url: /files/
+      weight: 30
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+module:
+  mounts:
+    - source: static
+      target: static
+    - source: files
+      target: static/files
+    - source: images
+      target: static/images
+    - source: icons
+      target: static/icons
+    - source: CV
+      target: static/CV
+    - source: bib
+      target: static/bib
