@@ -25,6 +25,10 @@
       --brand: #0a4f85;
       --chip: #e2eefb;
       --shadow: 0 18px 45px -22px rgba(15, 23, 42, 0.45);
+      --canvas-bg-rgb: 243, 247, 252;
+      --primary-rgb: 10, 79, 133;
+      --accent-rgb: 21, 112, 184;
+      --ink-rgb: 15, 23, 42;
     }
 
     :root[data-theme="dark"] {
@@ -37,6 +41,10 @@
       --brand: #7ab8ff;
       --chip: #162741;
       --shadow: 0 18px 45px -20px rgba(0, 0, 0, 0.7);
+      --canvas-bg-rgb: 13, 20, 35;
+      --primary-rgb: 122, 184, 255;
+      --accent-rgb: 163, 205, 255;
+      --ink-rgb: 229, 237, 247;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -50,6 +58,10 @@
         --brand: #7ab8ff;
         --chip: #162741;
         --shadow: 0 18px 45px -20px rgba(0, 0, 0, 0.7);
+        --canvas-bg-rgb: 13, 20, 35;
+        --primary-rgb: 122, 184, 255;
+        --accent-rgb: 163, 205, 255;
+        --ink-rgb: 229, 237, 247;
       }
     }
 
@@ -67,11 +79,36 @@
         linear-gradient(to bottom, var(--bg-soft), var(--bg));
       font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
       line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      z-index: 1;
+      background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), transparent 70%);
+    }
+
+    #interactive-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .wrap {
       width: min(1100px, calc(100% - 2rem));
       margin: 1.1rem auto 2rem;
+      position: relative;
+      z-index: 2;
     }
 
     .top {
@@ -160,6 +197,7 @@
 </head>
 
 <body>
+  <canvas id="interactive-bg" aria-hidden="true"></canvas>
   <main class="wrap">
     <header class="top">
       <div class="brand">{{ $siteTitle }} / Publications</div>
@@ -177,6 +215,202 @@
       </div>
     </article>
   </main>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById("interactive-bg");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      let w = 0;
+      let h = 0;
+      let t = 0;
+      let rafId = null;
+      const mouse = { x: -1e9, y: -1e9 };
+
+      const nodeCount = 90;
+      const linkRadius = 130;
+      const nodes = [];
+      const equations = [
+        "argmax_pi E[sum gamma^t r_t]",
+        "Q_pi(s,a) = r + gamma E[Q_pi(s',a')]",
+        "min_theta E[(R - f_theta)^2]",
+        "KL(p||q) = sum p log(p/q)",
+        "H(s,a) = -sum p log p",
+        "div(sigma grad V)=0"
+      ].map((text) => ({ text, x: 0, y: 0, vx: 0, vy: 0, alpha: Math.random() * 0.3 + 0.05 }));
+
+      function readColors() {
+        const cs = getComputedStyle(document.documentElement);
+        return {
+          bg: (cs.getPropertyValue("--canvas-bg-rgb") || "243,247,252").trim(),
+          primary: (cs.getPropertyValue("--primary-rgb") || "10,79,133").trim(),
+          accent: (cs.getPropertyValue("--accent-rgb") || "21,112,184").trim(),
+          ink: (cs.getPropertyValue("--ink-rgb") || "15,23,42").trim()
+        };
+      }
+
+      let colors = readColors();
+
+      function resize() {
+        w = Math.floor(window.innerWidth * dpr);
+        h = Math.floor(window.innerHeight * dpr);
+        canvas.width = w;
+        canvas.height = h;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+      }
+
+      function init() {
+        nodes.length = 0;
+        for (let i = 0; i < nodeCount; i += 1) {
+          nodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.32,
+            vy: (Math.random() - 0.5) * 0.32,
+            pulse: Math.random() * Math.PI * 2
+          });
+        }
+
+        equations.forEach((eq, idx) => {
+          eq.x = ((idx + 1) / (equations.length + 1)) * w;
+          eq.y = (0.2 + Math.random() * 0.6) * h;
+          eq.vx = (Math.random() - 0.5) * 0.14;
+          eq.vy = (Math.random() - 0.5) * 0.14;
+        });
+      }
+
+      function flow(x, y, tt) {
+        const s = 0.0009;
+        const ttScaled = tt * 0.0003;
+        const fx = Math.sin(y * s + ttScaled) * 0.24 + Math.sin((x + y) * s * 0.6) * 0.14;
+        const fy = Math.cos(x * s * 1.1 + ttScaled) * 0.24 + Math.sin((x - y) * s * 0.5) * 0.1;
+        return { x: fx, y: fy };
+      }
+
+      function draw(time) {
+        t = time || 0;
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.fillStyle = `rgb(${colors.bg})`;
+        ctx.fillRect(0, 0, w, h);
+
+        const grad = ctx.createLinearGradient(0, 0, w, h);
+        grad.addColorStop(0, `rgba(${colors.primary},0.12)`);
+        grad.addColorStop(1, `rgba(${colors.accent},0.08)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        for (let i = 0; i < nodes.length; i += 1) {
+          const n = nodes[i];
+          const f = flow(n.x, n.y, t);
+          const dx = n.x - mouse.x;
+          const dy = n.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          const repel = dist < 160 * dpr ? ((160 * dpr - dist) / (160 * dpr)) * 0.4 : 0;
+
+          n.vx += f.x * 0.6 - (dx / (dist + 1)) * repel;
+          n.vy += f.y * 0.6 - (dy / (dist + 1)) * repel;
+          n.x += n.vx;
+          n.y += n.vy;
+          n.vx *= 0.97;
+          n.vy *= 0.97;
+
+          if (n.x < -20) n.x = w + 20;
+          if (n.x > w + 20) n.x = -20;
+          if (n.y < -20) n.y = h + 20;
+          if (n.y > h + 20) n.y = -20;
+          n.pulse += 0.02;
+        }
+
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = `rgba(${colors.primary},0.72)`;
+        ctx.beginPath();
+        for (let i = 0; i < nodes.length; i += 1) {
+          const n = nodes[i];
+          const r = 1.05 + Math.sin(n.pulse) * 0.85;
+          ctx.moveTo(n.x + r, n.y);
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        }
+        ctx.fill();
+
+        const radius = linkRadius * dpr;
+        const radius2 = radius * radius;
+        ctx.lineWidth = 1 * dpr;
+        for (let i = 0; i < nodes.length; i += 1) {
+          for (let j = i + 1; j < nodes.length; j += 1) {
+            const a = nodes[i];
+            const b = nodes[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < radius2) {
+              const d = Math.sqrt(d2);
+              const alpha = 1 - d / radius;
+              if (alpha > 0.05) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(${colors.accent},${0.28 * alpha + 0.06})`;
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+        ctx.font = `${13 * dpr}px ui-monospace, Menlo, Consolas, Monaco, monospace`;
+        ctx.fillStyle = `rgba(${colors.ink},0.14)`;
+        equations.forEach((eq) => {
+          const f = flow(eq.x, eq.y, t);
+          eq.vx += f.x * eq.alpha * 0.55;
+          eq.vy += f.y * eq.alpha * 0.55;
+          eq.x += eq.vx;
+          eq.y += eq.vy;
+          eq.vx *= 0.985;
+          eq.vy *= 0.985;
+
+          if (eq.x < -240) eq.x = w + 240;
+          if (eq.x > w + 240) eq.x = -240;
+          if (eq.y < -60) eq.y = h + 60;
+          if (eq.y > h + 60) eq.y = -60;
+
+          ctx.fillText(eq.text, eq.x, eq.y);
+        });
+
+        rafId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener("mousemove", (event) => {
+        mouse.x = event.clientX * dpr;
+        mouse.y = event.clientY * dpr;
+      });
+      window.addEventListener("mouseleave", () => {
+        mouse.x = -1e9;
+        mouse.y = -1e9;
+      });
+      window.addEventListener("resize", () => {
+        resize();
+        init();
+      });
+
+      const observer = new MutationObserver(() => {
+        colors = readColors();
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+      resize();
+      init();
+      rafId = requestAnimationFrame(draw);
+
+      window.addEventListener("beforeunload", () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        observer.disconnect();
+      });
+    })();
+  </script>
 
   <script>
     (function () {
