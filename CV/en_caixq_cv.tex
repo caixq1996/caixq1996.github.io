@@ -30,8 +30,6 @@
 % Simpler bibsection for CV sections
 % (thanks to natbib for inspiration)
 
-
-
 % Layout: Puts the section titles on left side of page
 \reversemarginpar
 
@@ -256,7 +254,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-\makeheading[Curriculum Vitae]{Xin-Qiang Cai [\href{https://caixq1996.github.io/}{Homepage}]}
+\makeheading[Curriculum Vitae]{Xin-Qiang Cai}
 
 \section{Contact Information}
 %
@@ -269,8 +267,8 @@
 \newlength{\rcollength}\setlength{\rcollength}{2.3in}%
 %
 \begin{tabular}[t]{@{}p{\textwidth-\rcollength}p{\rcollength}}
-{Phone:} +81-08063217094, +86-15651682506 \\
-{E-mail:} \href{cai@ms.k.u-tokyo.ac.jp}{cai@ms.k.u-tokyo.ac.jp}, \href{jkrsndivide@gmail.com}{jkrsndivide@gmail.com}\\
+{Phone:} +81-08063217094 \\
+{E-mail:} \href{mailto:xinqiang.cai@riken.jp}{xinqiang.cai@riken.jp}, \href{mailto:jkrsndivide@gmail.com}{jkrsndivide@gmail.com}\\
 % Nanjing 210023, China &  \href{http://www.lamda.nju.edu.cn/caixq/}{www.lamda.nju.edu.cn/caixq/}
 \end{tabular}
 
@@ -278,11 +276,14 @@
 %
 %Machine Learning, Optimization
 
+\section{Biography} [\href{https://scholar.google.com/citations?hl=en&user=rtMUMooAAAAJ&view_op=list_works&gmla=ALUCkoXDtLBYZLV5MJOftJkHn-eBzh9vUFmU-eFvtizTEQpodfuHUzP01oZ0O8HCKk1SSzgNi2ehuvAezXKWd3R_fFvHx6-xZTwetjvxB39oArQmsikz5HhW483de8VDOm8YQQNjue53tPdZSizlNb3aCUk}{Google Scholar}, \href{https://dblp.org/pid/248/8034.html}{dblp}]
+Currently I am a postdoctoral researcher in the \href{https://aip.riken.jp/labs/generic_tech/imperfect_inf_learn/}{Imperfect Information Learning Team} at \href{https://aip.riken.jp/}{RIKEN Center for Advanced Intelligence Project}, led by professor \href{https://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}.
+
 \section{Education}
 \href{https://www.u-tokyo.ac.jp/en/}{\textbf{The University of Tokyo}},
 Tokyo, Japan
 \begin{outerlist}
-\item[] Ph.D., Complexity Science and Engineering,  Oct., 2021  -- Sep., 2024 (Expected)
+\item[] Ph.D., Complexity Science and Engineering,  Oct., 2021  -- Sep., 2024
  \begin{innerlist}
         \item Laboratory: \href{http://www.ms.k.u-tokyo.ac.jp/index.html}{Sugiyama-Yokoya-Ishida Lab}, led by Professor \href{http://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}
         \item Advisor: Professor~\href{http://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}
@@ -290,7 +291,6 @@ Tokyo, Japan
 \end{innerlist}
 \end{outerlist}
 
-%
 \href{https://www.nju.edu.cn/EN/}{\textbf{Nanjing University}},
 Nanjing, China
 \begin{outerlist}
@@ -298,109 +298,84 @@ Nanjing, China
  \begin{innerlist}
         \item Laboratory: \href{http://www.lamda.nju.edu.cn/MainPage.ashx}{LAMDA Lab}, led by Professor \href{http://cs.nju.edu.cn/zhouzh}{Zhi-Hua Zhou}
         \item Advisor: Co-supervised by Professor~\href{https://cs.nju.edu.cn/zhouzh/}{Zhi-Hua Zhou} and Professor~\href{https://lamda.nju.edu.cn/jiangy/}{Yuan Jiang}
-        \item Research Area: Data Mining\\
+        \item Research Area: Machine Learning and Data Mining\\
 \end{innerlist}
 \end{outerlist}
-
 
 \href{https://en.nwpu.edu.cn/}{\textbf{Northwestern Polytechnical University}}, Xi'an, China
 \begin{outerlist}
 \item[] B.E., Aircraft Design and Engineering, Sep., 2014  -- Jun., 2018
 \end{outerlist}
+
 \section{Research Interests}
-I am interested in various topics on machine learning and data mining. My research primarily focuses on reinforcement learning and imitation learning from weak supervision.
+Reinforcement Learning, Imitation Learning, Learning with Weak Supervision
 
-% \section{Research \& Projects}
-% %
-% % {\textbf{High-Dimensional Imitation Learning}} \hfill \textbf{Jun., 2019 -- Present}
-% % \begin{outerlist}
-% % \item[] Master Thesis/Project supervised by Prof. Zhi-Hua Zhou and Prof. Yuan Jiang
-% %  \begin{innerlist}
-% %         \item Pointed out the key for adversary-based imitation learning methods with high-dimensional inputs is balancing the discrimination-rewarding trade-off
-% %         \item Presented a theorem to disclose how to deal with the trade-off
-% %         \item Proposed a new algorithm named HashReward to solve high-dimensional imitation learning problems by using supervised hashing, and HashReward gains state-of-the-art performance in many pixel-level environments
-% %         \item The work has been submitted to AAMAS 2021
-% % \end{innerlist}
-% % \end{outerlist}
-% {\textbf{Imitation Learning with Heterogeneous Observations}} \hfill \textbf{Jun., 2020 -- Feb., 2021}
-% \begin{outerlist}
-% \item[] MSc thesis research
-% \begin{innerlist}
-% \item Project: Machine Learning in Open and Dynamic Environments
-% \item Analyze the imitation learning tasks in open environments, where the observations in the demonstrations and the environment are heterogeneous. Proposing a new algorithm to handle this task. This work is publicly available on arxiv.
-% \end{innerlist}
-% \end{outerlist}
-
-% \blankline
-
-% {\textbf{Learning from Human Based Objectives}} \hfill \textbf{Aug., 2019 -- Present}
-% \begin{outerlist}
-% \item[] MSc thesis research
-% \begin{innerlist}
-% \item Project: Human in The Loop Learning
-% \item Proposing a student-teacher framework for learning under human based objective, which is hard to optimize for the traditional learning process.
-% \end{innerlist}
-% \end{outerlist}
-
-% \blankline
-
-% {\textbf{High-Dimensional Imitation Learning}} \hfill \textbf{Jun., 2019 -- Jun., 2020}
-% \begin{outerlist}
-% \item[] MSc thesis research
-% \begin{innerlist}
-% \item Project: Machine Learning in Open and Dynamic Environments
-% \item Pointing out the key for adversary-based imitation learning methods with high-dimensional inputs in theory, and propose a new state-of-the-art algorithm based on supervised hashing to solve imitation learning problems in pixel-level control tasks. This work has been published in AAMAS 2021.
-% \end{innerlist}
-% \end{outerlist}
-
-% \blankline
-
-% % {\textbf{Streaming Classification with Emerging New Classes}} \hfill \textbf{Sep., 2018 -- Aug. 2019}
-% % \begin{outerlist}
-% % \item[] Master Thesis/Project supervised by Prof. Yuan Jiang and advised by Prof. Kai-Ming Ting
-% %  \begin{innerlist}
-% %         \item Identified real-world systems in streaming classification with emerging new classes (SENC) problems could contain emerging new classes both geometrically far from and near by known classes
-% %         \item Refined the SENC problem into an $\alpha$-SENC problem by using a class separation indicator $\alpha$, where $\alpha$ is used to specify the degrees of difficulties of the $\alpha$ SENC problem in a single data stream
-% %         \item Proposed a new algorithm named SENNE, which is based on nearest neighbor ensembles, to solve both low-$\alpha$ and high-$\alpha$ problems
-% %         \item The work has been published in ICDM 2019
-% % \end{innerlist}
-% % \end{outerlist}
-
-% {\textbf{Streaming Classification with Emerging New Classes}} \hfill \textbf{Sep., 2018 -- Aug. 2019}
-% \begin{outerlist}
-% \item[] MSc thesis research
-% \begin{innerlist}
-% \item Project: Machine Learning in Open and Dynamic Environments
-% \item Refine the current streaming classification with emerging new classes (SENC) problem into an $\alpha$-SENC problem by using a class separation indicator $\alpha$, and propose a new algorithm based on nearest neighbor ensembles to deal with both low and high $\alpha$-SENC problem. This work has been published in ICDM 2019.
-% \end{innerlist}
-% \end{outerlist}
-
-\section{Publications \\(* denotes equal contributions)} \vspace{-4.2ex}
+\section{Publications \\(* denotes equal contributions)} \vspace{-4.7ex}
 \begin{bibsectiond}%
-\item Kaiyan Zhao, Qiyu Wu, {\bf Xin-Qiang Cai}, Yoshimasa Tsuruoka. \href{https://arxiv.org/pdf/2309.08929v1.pdf}{Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding}. In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://2024.eacl.org/}{ECAL'23})}, Malta, 2024.
-\item Pushi Zhang*, Baiting Zhu*, \textbf{Xin-Qiang Cai*}, Li Zhao, Masashi Sugiyama, Jiang Bian. \href{https://openreview.net/pdf?id=SjNlIHY8db}{IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map}. In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23})}, \href{https://www.robot-learning.ml/2023/}{6th Robot Learning Workshop}, New Orleans, US, 2023.
+\item Soichiro Nishimori, \textbf{Xin-Qiang Cai}, Johannes Ackermann, Masashi Sugiyama. Leveraging Domain-Unlabeled Data in Offline Reinforcement Learning across Two Domains. In: \textbf{Proceedings of the second Reinforcement Learning Conference (\href{https://rl-conference.cc/}{RLC'25})}, Edmonton, Aug. 5-9, 2025.
 
-\item  \textbf{Xin-Qiang Cai}, Pushi Zhang, Li Zhao, Jiang Bian, \href{http://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}, Ashley Juan Llorens. \href{https://openreview.net/pdf?id=prIwYTU9PV}{Distributional Pareto-Optimal Multi-Objective Reinforcement Learning}. In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23})}, New Orleans, US, 2023.
+\item Jing-Cheng Pang, Nan Tang, Kaiyuan Li, Yuting Tang, \textbf{Xin-Qiang Cai}, Zhen-Yu Zhang, Gang Niu, Masashi Sugiyama, Yang Yu. Learning View-invariant World Models for Visual Robotic Manipulation. In: \textbf{Proceedings of the Thirteenth International Conference on Learning Representations (\href{https://iclr.cc/Conferences/2025}{ICLR'25})}, Singapore, Apr. 24-28, 2025.
+\item Zelei Cheng, Xian Wu, Jiahao Yu, Shuo Han, \textbf{Xin-Qiang Cai}, Xinyu Xing. Soft-Label Integration for Robust Toxicity Classification. In: \textbf{Proceedings of the Thirty-eighth Conference on Neural Information Processing Systems (\href{https://nips.cc/Conferences/2024}{NeurIPS'24})}, Vancouver, Canada, Dec. 10-15, 2024.
+\item Yuting Tang*, \textbf{Xin-Qiang Cai*}, Yao-Xiang Ding, Qiyu Wu, Guoqing Liu, Masashi Sugiyama. Reinforcement Learning from Bagged Reward: A Transformer-based Approach for Instance-Level Reward Redistribution. In: \textbf{Proceedings of the 41st International Conference on Machine Learning (\href{https://icml.cc/virtual/2024}{ICML'24}), Aligning Reinforcement Learning Experimentalists and Theorists (ARLET) workshop}, Vienna, Austria, Jul. 21-27, 2024.
+\item Xingyu Song, Zhan Li, Shi Chen, \textbf{Xin-Qiang Cai}, Kazuyuki Demachi. An Animation-based Augmentation Approach for Action Recognition from Discontinuous Video. In: \textbf{Proceedings of the 27th European Conference on Artificial Intelligence (\href{https://www.ecai2024.eu/}{ECAI'24})}, Santiago de Compostela, Oct. 19-24, 2024. 
+\item Kaiyan Zhao, Qiyu Wu, \textbf{Xin-Qiang Cai}, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. In: \textbf{Proceedings of the 8th Conference of the European Chapter of the Association for Computational Linguistics (\href{https://aclanthology.org/2024.eacl-long.59/}{EACL'24})}, Malta, Mar. 17-22, 2024.
+\item Pushi Zhang*, Baiting Zhu*, \textbf{Xin-Qiang Cai*}, Li Zhao, Masashi Sugiyama, Jiang Bian. IG-Net: Image-Goal Network for Offline Visual Navigation on A Large-Scale Game Map. In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23}), 6th Robot Learning Workshop}, New Orleans, US, Dec. 10-16, 2023.
+\item  \textbf{Xin-Qiang Cai}, Pushi Zhang, Li Zhao, Jiang Bian, Masashi Sugiyama, Ashley Juan Llorens. \href{https://neurips.cc/virtual/2023/poster/70393}{Distributional Pareto-Optimal Multi-Objective Reinforcement Learning.} In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23})}, New Orleans, US, 2023.
 
-\item  \textbf{Xin-Qiang Cai}, Yu-Jie Zhang, Chao-Kai Chiang, \href{http://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}. \href{https://openreview.net/pdf?id=CswEebv5Hn}{Imitation Learning from Vague Feedback}. In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23})}, New Orleans, US, 2023.
+\item  \textbf{Xin-Qiang Cai}, Yu-Jie Zhang, Chao-Kai Chiang, Masashi Sugiyama. \href{https://neurips.cc/virtual/2023/poster/72411}{Imitation Learning from Vague Feedback.} In: \textbf{Proceedings of the Thirty-seventh Conference on Neural Information Processing Systems (\href{https://openreview.net/group?id=NeurIPS.cc/2023/Conference}{NeurIPS'23})}, New Orleans, US, 2023.
 
-\item  \textbf{Xin-Qiang Cai}, Yao-Xiang Ding, Zi-Xuan Chen, \href{http://www.lamda.nju.edu.cn/jiangy/}{Yuan Jiang}, \href{http://www.ms.k.u-tokyo.ac.jp/sugi/}{Masashi Sugiyama}, and \href{http://cs.nju.edu.cn/zhouzh/}{Zhi-Hua Zhou}. \href{https://openreview.net/forum?id=3ULaIHxn9u7}{Seeing Differently, Acting Similarly: Imitation Learning with Heterogeneous Observations}. In: \textbf{Proceedings of the Eleventh International Conference on Learning Representations (\href{http://icdm2019.bigke.org/}{ICLR'23}, spotlight)}, Kigali, Rwanda, 2023.
+\item  \textbf{Xin-Qiang Cai}, Yao-Xiang Ding, Zi-Xuan Chen, Yuan Jiang, Masashi Sugiyama, Zhi-Hua Zhou. \href{https://openreview.net/forum?id=3ULaIHxn9u7}{Seeing Differently, Acting Similarly: Heterogeneously Observable Imitation Learning.} In: \textbf{Proceedings of the Eleventh International Conference on Learning Representations (\href{http://icdm2019.bigke.org/}{ICLR'23}, spotlight)}, Kigali, Rwanda, 2023.
 
-\item Zi-Xuan Chen*, \textbf{Xin-Qiang Cai*}, \href{http://www.lamda.nju.edu.cn/jiangy/}{Yuan Jiang}, and \href{http://cs.nju.edu.cn/zhouzh/}{Zhi-Hua Zhou}. \href{https://dl.acm.org/doi/abs/10.5555/3535850.3535879}{Anomaly Guided Policy Learning from Imperfect Demonstrations}. In: \textbf{Proceedings of the 21th International Conference on Autonomous Agents and Multi-Agent Systems (\href{https://aamas2022-conference.auckland.ac.nz/}{AAMAS'22}, oral)}, Auckland, New Zealand, 2022.
+\item Zi-Xuan Chen*, \textbf{Xin-Qiang Cai*}, Yuan Jiang, Zhi-Hua Zhou. \href{https://dl.acm.org/doi/abs/10.5555/3535850.3535879}{Anomaly Guided Policy Learning from Imperfect Demonstrations.} In: \textbf{Proceedings of the 21th International Conference on Autonomous Agents and Multi-Agent Systems (\href{https://aamas2022-conference.auckland.ac.nz/}{AAMAS'22}, oral)}, Auckland, New Zealand, 2022.
 
-\item \textbf{Xin-Qiang Cai}, Yao-Xiang Ding, \href{http://www.lamda.nju.edu.cn/jiangy/}{Yuan Jiang}, and \href{http://cs.nju.edu.cn/zhouzh/}{Zhi-Hua Zhou}. \href{https://dl.acm.org/doi/10.5555/3463952.3463990}{Imitation Learning from Pixel-Level Demonstrations by HashReward}. In: \textbf{Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems (\href{https://aamas2021.soton.ac.uk/}{AAMAS'21})}, online, 2021.
+\item \textbf{Xin-Qiang Cai}, Yao-Xiang Ding, \href{http://www.lamda.nju.edu.cn/jiangy/}{Yuan Jiang}, and \href{http://cs.nju.edu.cn/zhouzh/}{Zhi-Hua Zhou}. \href{https://dl.acm.org/doi/10.5555/3463952.3463990}{Imitation Learning from Pixel-Level Demonstrations by HashReward}. In: \textbf{Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems (\href{https://aamas2021.soton.ac.uk/}{AAMAS'21}, oral)}, online, 2021.
 
-\item  \textbf{Xin-Qiang Cai}, Peng Zhao, \href{http://ai.nju.edu.cn/KaiMingTing/}{Kai Ming Ting}, Xin Mu, \href{https://lamda.nju.edu.cn/jiangy/}{Yuan Jiang}. \href{https://ieeexplore.ieee.org/document/8970887}{Nearest Neighbor Ensembles: An Effective Method for Difficult Problems in Streaming Classification with Emerging New Classes}. In: \textbf{Proceedings of the 19th IEEE International Conference on Data Mining (\href{http://icdm2019.bigke.org/}{ICDM'19})}, Beijing, China, 2019. 
+\item  \textbf{Xin-Qiang Cai}, Peng Zhao, \href{http://ai.nju.edu.cn/KaiMingTing/}{Kai Ming Ting}, Xin Mu, \href{https://lamda.nju.edu.cn/jiangy/}{Yuan Jiang}. \href{https://ieeexplore.ieee.org/document/8970887}{Nearest Neighbor Ensembles: An Effective Method for Difficult Problems in Streaming Classification with Emerging New Classes.} In: \textbf{Proceedings of the 19th IEEE International Conference on Data Mining (\href{http://icdm2019.bigke.org/}{ICDM'19})}, Beijing, China, 2019.
 \end{bibsectiond}
 
-% \section{Preprints}\vspace{-4.2ex}
-% \begin{bibsectiond}
-% % \addtocounter{enumi}{2}%
-% \item Kaiyan Zhao, Qiyu Wu, {\bf Xin-Qiang Cai}, Yoshimasa Tsuruoka. Leveraging Multi-lingual Positive Instances in Contrastive Learning to Improve Sentence Embedding. \href{https://arxiv.org/abs/2309.08929}{arXiv}.
-% \end{bibsectiond}
+\section{Preprints}\vspace{-4.7ex}
+\begin{bibsectiond}
+\item \textbf{Xin-Qiang Cai}, Masashi Sugiyama. VI-CuRL: Stabilizing Verifier-Independent RL Reasoning via Confidence-Guided Variance Reduction. \href{https://arxiv.org/abs/2602.12579}{arXiv}.
+\item Zhiqiang Kou*, Junyang Chen*, \textbf{Xin-Qiang Cai}, Xiaobo Xia, Ming-Kun Xie, Dong-Dong Wu, Biao Liu, Yuheng Jia, Xin Geng, Masashi Sugiyama, Tat-Seng Chua. Positive-Unlabeled Reinforcement Learning Distillation for On-Premise Small Models. \href{https://arxiv.org/abs/2601.20687}{arXiv}.
+\item Zhiqiang Kou, Junyang Chen, \textbf{Xin-Qiang Cai}, Ming-Kun Xie, Biao Liu, Changwei Wang, Lei Feng, Yuheng Jia, Gang Niu, Masashi Sugiyama, Xin Geng. Rethinking Toxicity Evaluation in Large Language Models: A Multi-Label Perspective. \href{https://arxiv.org/abs/2510.15007}{arXiv}.
+\item \textbf{Xin-Qiang Cai}, Wei Wang, Feng Liu, Tongliang Liu, Gang Niu, Masashi Sugiyama. Reinforcement Learning with Verifiable yet Noisy Rewards under Imperfect Verifiers. \href{https://arxiv.org/abs/2510.00915}{arXiv}.
+\item Jiansong Wan, Chengming Zhou, Jinkua Liu, Xiangge Huang, Xiaoyu Chen, Xiaohan Yi, Qisen Yang, Baiting Zhu, \textbf{Xin-Qiang Cai}, Lixing Liu, Rushuai Yang, Chuheng Zhang, Sherif Abdelfattah, Hayong Shin, Pushi Zhang, Li Zhao, Jiang Bian. PIG-Nav: Key Insights for Pretrained Image Goal Navigation Models. \href{https://arxiv.org/abs/2507.17220}{arXiv}.
+\item Zelei Cheng*, \textbf{Xin-Qiang Cai*}, Yuting Tang, Pushi Zhang, Boming Yang, Masashi Sugiyama, Xingyu Xing. UC-MOA: Utility-Conditioned Multi-Objective Alignment for Distributional Pareto-Optimality. \href{https://arxiv.org/pdf/2503.10669}{arXiv}.
+\item Yuting Tang*, \textbf{Xin-Qiang Cai*}, Jing-Cheng Pang, Qiyu Wu, Yao-Xiang Ding, Masashi Sugiyama. Beyond Simple Sum of Delayed Rewards: Non-Markovian Reward Modeling for Reinforcement Learning. \href{https://arxiv.org/abs/2410.20176}{arXiv}.
+\end{bibsectiond}
 
-% \section{Patent}\vspace{-4.2ex}
-% 一种摄像器材记录的视频图像数据的高维模仿学习方法. Patent No. 202011450396.1. 2020.
+\section{Working Experience}
+\textbf{Part-Time}
+\begin{outerlist}
+\item[]
+\begin{innerlist}
+\item Microsoft Research Asia (MSRA), Intern, Dec. 2023 to Mar. 2024.
+\end{innerlist}
+\end{outerlist}
+
+\textbf{Full-Time}
+\begin{outerlist}
+\item[]
+\begin{innerlist}
+\item RIKEN Center for Advanced Intelligence Project (AIP), Postdoc, Oct. 2024 to now.
+\end{innerlist}
+\end{outerlist}
+
+\section{Teaching Experience}\vspace{-4.7ex}
+\begin{bibsectiond}
+\item Guest Lecturer. Ochanomizu University (Spring 2026). Lecturer for one class: ``An Introduction to Reinforcement Learning''.
+\end{bibsectiond}
+
+\section{Fundings}
+\begin{outerlist}
+\item[]
+\begin{innerlist}
+\item \makebox[2.6cm][l]{2026--2028} JSPS KAKENHI -- Grant-in-Aid for Early-Career Scientists, PI (5,000,000 JPY)
+\item \makebox[2.6cm][l]{2024--2026} JSPS KAKENHI -- Grant-in-Aid for JSPS Fellows, PI (1,500,000 JPY)
+\item \makebox[2.6cm][l]{2022} Microsoft Research Asia Collaborative Research Program Fellowship (10,000 USD)
+\item \makebox[2.6cm][l]{2021} SPRING GX Fellowship (1,000,000 JPY)
+\end{innerlist}
+\end{outerlist}
 
 \section{Honors and Awards}
 \textbf{Contest Awards}
@@ -408,7 +383,7 @@ I am interested in various topics on machine learning and data mining. My resear
 \item[]
 \begin{innerlist}
 \item \makebox[2.6cm][l]{2018} First Prize, ZhongAn Hackathon Contest, AI scenario
-\item \makebox[2.6cm][l]{2017} Sliver Medal, ACM/ICPC Asia Regional Contest, Qingdao Site
+\item \makebox[2.6cm][l]{2017} Silver Medal, ACM/ICPC Asia Regional Contest, Qingdao Site
 \item \makebox[2.6cm][l]{2017} Bronze Medal, ACM/ICPC Asia Regional Contest, Xinjiang Site
 \item \makebox[2.6cm][l]{2016, 2017} First Prize, China Collegiate Programming Contest
 \item \makebox[2.6cm][l]{2016, 2017} Honorable Mention, Interdisciplinary Contest In Modeling
@@ -421,13 +396,13 @@ I am interested in various topics on machine learning and data mining. My resear
 
 \blankline
 
-\textbf{Honors and Fellowshops}
+\textbf{Honors}
 \begin{outerlist}
-\item[] 
+\item[]
 \begin{innerlist}
-\item \makebox[2.6cm][l]{2023} \href{https://www.jsps.go.jp/}{Japan Society for the Promotion of Science (JSPS, 日本学術振興会) DC2 Fellowship}
-\item \makebox[2.6cm][l]{2022} MSRA Collaborative Research Program Fellowship (D-CORE 2022)
-\item \makebox[2.6cm][l]{2021} \href{https://spring-gx-appl.adm.s.u-tokyo.ac.jp/en/}{SPRING GX Fellowship}
+\item \makebox[2.6cm][l]{2024} Star of Tomorrow Award, Microsoft Research Asia (MSRA)
+\item \makebox[2.6cm][l]{2024} JSPS DC2 Fellowship, The University of Tokyo
+\item \makebox[2.6cm][l]{2021} SPRING GX Fellowship, The University of Tokyo
 \item \makebox[2.6cm][l]{2021} Excellent Graduate of Nanjing University
 \item \makebox[2.6cm][l]{2020} Excellent Graduate Student of Nanjing University
 \item \makebox[2.6cm][l]{2020} AAMAS 2021 Attendance Scholarship
@@ -445,7 +420,7 @@ I am interested in various topics on machine learning and data mining. My resear
 \begin{outerlist}
 \item[]
 \begin{innerlist}
-\item Reviewer for ICML 2022\&2023\&2024, NeurIPS 2022\&2023, ICLR 2023\&2024, ECAI 2020, CIKM 2020, IJCAI 2021\&2022\&2023, CCML 2021
+\item Reviewer for ICML 2022, 2023, 2024, 2025; NeurIPS 2022, 2023, 2024, 2025; ICLR 2023, 2024, 2025, 2026; ECAI 2020; CIKM 2020; IJCAI 2021, 2022, 2023; CCML 2021
 \end{innerlist}
 \end{outerlist}
 
@@ -453,7 +428,7 @@ I am interested in various topics on machine learning and data mining. My resear
 \begin{outerlist}
 \item[]
 \begin{innerlist}
-\item Reviewer for \href{https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385}{IEEE Transactions on Neural Networks and Learning Systems (TNNLS)}
+\item Reviewer for \href{https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385}{IEEE Transactions on Neural Networks and Learning Systems (TNNLS)}, \href{https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385}{Transactions on Machine Learning Research (TMLR)}
 \end{innerlist}
 \end{outerlist}
 
@@ -462,39 +437,21 @@ I am interested in various topics on machine learning and data mining. My resear
 \item[]
 \begin{innerlist}
 \item 2021 AAMAS (Proceedings of the 20th International Conference on Autonomous Agents and Multi-Agent Systems)
-\item 2018 \& 2019 MLA (China Symposium on Machine Learning and Applications)
+\item 2018, 2019 MLA (China Symposium on Machine Learning and Applications)
 \end{innerlist}
 \end{outerlist}
-% \begin{loneinnerlist}
-%     \item[] \textbf{Conference Research Services} \\ Reviewer in ECAI 2020, CIKM 2020, IJCAI 2021, and CCML 2021
-%     \item[] \textbf{Journal Research Services} \\ \href{https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385}{IEEE Transactions on Neural Networks and Learning Systems (TNNLS)}
-%     \item[] \textbf{Volunteer Work} \\ 2018 \& 2019 MLA (China Symposium on Machine Learning and Applications)
-% \end{loneinnerlist}
 
 \section{Computer Skills}
-
 \begin{loneinnerlist}
-    \item[] Programming: Python, C/C++, {\sc Matlab}, Java, Shell, \LaTeX
+    \item[] Programming: Python, C/C++, Matlab, Java, Shell, \LaTeX
     \item[] Operating systems: Ubuntu/Linux, Windows family
-    % \item[] AI Tools: Tensorflow, Pytorch, XGBoost, Sklearn, Numpy, STL
-    \item[] Languages: Chinese (Native), English (TOEFL-iBT 105/120)
+    \item[] Languages: Chinese (Native), English (TOEFL-iBT 105/120), Japanese (Intermediate)
 \end{loneinnerlist}
-
-% \section{Language Skills}
-
-% \begin{loneinnerlist}
-%     \item[] Chinese: Native
-%     \item[] English: Professional Proficiency (TOEFL-iBT 105/120)
-% \end{loneinnerlist}
 
 \section{Hobbies}
 \begin{loneinnerlist}
-    \item[] Fitness, Running
+    \item[] Fitness, Hiking, Running
 \end{loneinnerlist}
-%\section{Paper}
-%\cite{zhang-Discriminative-Codeword-Selection,zhang-Convex-Experimental-Design,AAAI-Modeling-Dynamic,AAAI-G-optimal,Chen-CLE}
-%\bibliographystyle{abbrv}
-%\bibliography{ref}
 \end{document}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
