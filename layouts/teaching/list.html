@@ -1,0 +1,441 @@
+{{- $title := .Title | default "Teaching" -}}
+{{- $siteTitle := .Site.Title -}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ $title }} | {{ $siteTitle }}</title>
+  <meta name="description" content="Courses and invited teaching activities by {{ $siteTitle }}." />
+  <link rel="icon" href="/icons/favicon.ico" sizes="16x16 32x32 48x48">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f3f7fc;
+      --bg-soft: #e7eff8;
+      --panel: rgba(255, 255, 255, 0.82);
+      --text: #0f172a;
+      --muted: #4b5563;
+      --line: rgba(15, 23, 42, 0.14);
+      --brand: #0a4f85;
+      --chip: #e2eefb;
+      --shadow: 0 18px 45px -22px rgba(15, 23, 42, 0.45);
+      --canvas-bg-rgb: 243, 247, 252;
+      --primary-rgb: 10, 79, 133;
+      --accent-rgb: 21, 112, 184;
+      --ink-rgb: 15, 23, 42;
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0d1423;
+      --bg-soft: #121d2f;
+      --panel: rgba(17, 28, 45, 0.84);
+      --text: #e5edf7;
+      --muted: #9cb0ca;
+      --line: rgba(229, 237, 247, 0.18);
+      --brand: #7ab8ff;
+      --chip: #162741;
+      --shadow: 0 18px 45px -20px rgba(0, 0, 0, 0.7);
+      --canvas-bg-rgb: 13, 20, 35;
+      --primary-rgb: 122, 184, 255;
+      --accent-rgb: 163, 205, 255;
+      --ink-rgb: 229, 237, 247;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0d1423;
+        --bg-soft: #121d2f;
+        --panel: rgba(17, 28, 45, 0.84);
+        --text: #e5edf7;
+        --muted: #9cb0ca;
+        --line: rgba(229, 237, 247, 0.18);
+        --brand: #7ab8ff;
+        --chip: #162741;
+        --shadow: 0 18px 45px -20px rgba(0, 0, 0, 0.7);
+        --canvas-bg-rgb: 13, 20, 35;
+        --primary-rgb: 122, 184, 255;
+        --accent-rgb: 163, 205, 255;
+        --ink-rgb: 229, 237, 247;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(21, 112, 184, 0.18), transparent 34%),
+        radial-gradient(circle at 85% 10%, rgba(10, 79, 133, 0.16), transparent 30%),
+        linear-gradient(to bottom, var(--bg-soft), var(--bg));
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      line-height: 1.65;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.25;
+      z-index: 1;
+      background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), transparent 70%);
+    }
+
+    #interactive-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .wrap {
+      width: min(1100px, calc(100% - 2rem));
+      margin: 1.1rem auto 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.72rem 0.9rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .brand {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+
+    .nav-link,
+    .theme-toggle {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.82rem;
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--chip);
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+
+    h1 {
+      margin: 0 0 0.25rem;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .desc {
+      margin: 0 0 1.1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .teaching-content h2 {
+      margin: 1.45rem 0 0.8rem;
+      font-size: 1.25rem;
+      border-left: 4px solid var(--brand);
+      padding-left: 0.6rem;
+    }
+
+    .teaching-content ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      display: grid;
+      gap: 0.5rem;
+      color: var(--muted);
+    }
+
+    .teaching-content li {
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="interactive-bg" aria-hidden="true"></canvas>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand">{{ $siteTitle }} / Teaching</div>
+      <div class="top-actions">
+        <a class="nav-link" href="../index.html">Back to Home</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">Theme</button>
+      </div>
+    </header>
+
+    <article class="panel">
+      <h1>{{ $title }}</h1>
+      <p class="desc">Courses and invited teaching activities.</p>
+      <div class="teaching-content">
+        {{ partial "teaching_full.html" . }}
+      </div>
+    </article>
+  </main>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById("interactive-bg");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      let w = 0;
+      let h = 0;
+      let t = 0;
+      let rafId = null;
+      const mouse = { x: -1e9, y: -1e9 };
+
+      const nodeCount = 90;
+      const linkRadius = 130;
+      const nodes = [];
+      const equations = [
+        "argmax_pi E[sum gamma^t r_t]",
+        "Q_pi(s,a) = r + gamma E[Q_pi(s',a')]",
+        "min_theta E[(R - f_theta)^2]",
+        "KL(p||q) = sum p log(p/q)",
+        "H(s,a) = -sum p log p",
+        "div(sigma grad V)=0"
+      ].map((text) => ({ text, x: 0, y: 0, vx: 0, vy: 0, alpha: Math.random() * 0.3 + 0.05 }));
+
+      function readColors() {
+        const cs = getComputedStyle(document.documentElement);
+        return {
+          bg: (cs.getPropertyValue("--canvas-bg-rgb") || "243,247,252").trim(),
+          primary: (cs.getPropertyValue("--primary-rgb") || "10,79,133").trim(),
+          accent: (cs.getPropertyValue("--accent-rgb") || "21,112,184").trim(),
+          ink: (cs.getPropertyValue("--ink-rgb") || "15,23,42").trim()
+        };
+      }
+
+      let colors = readColors();
+
+      function resize() {
+        w = Math.floor(window.innerWidth * dpr);
+        h = Math.floor(window.innerHeight * dpr);
+        canvas.width = w;
+        canvas.height = h;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+      }
+
+      function resetNodes() {
+        nodes.length = 0;
+        for (let i = 0; i < nodeCount; i += 1) {
+          nodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.28,
+            vy: (Math.random() - 0.5) * 0.28,
+            pulse: Math.random() * Math.PI * 2
+          });
+        }
+        equations.forEach((eq, index) => {
+          eq.x = ((index + 1) / (equations.length + 1)) * w;
+          eq.y = (0.24 + Math.random() * 0.52) * h;
+          eq.vx = (Math.random() - 0.5) * 0.12;
+          eq.vy = (Math.random() - 0.5) * 0.12;
+        });
+      }
+
+      function field(x, y, time) {
+        const scale = 0.0009;
+        const phase = time * 0.0003;
+        return {
+          x: Math.sin(y * scale + phase) * 0.24 + Math.sin((x + y) * scale * 0.6) * 0.14,
+          y: Math.cos(x * scale * 1.1 + phase) * 0.24 + Math.sin((x - y) * scale * 0.5) * 0.1
+        };
+      }
+
+      function draw(time) {
+        t = time || 0;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = `rgb(${colors.bg})`;
+        ctx.fillRect(0, 0, w, h);
+
+        const gradient = ctx.createLinearGradient(0, 0, w, h);
+        gradient.addColorStop(0, `rgba(${colors.primary},0.12)`);
+        gradient.addColorStop(1, `rgba(${colors.accent},0.08)`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, w, h);
+
+        const radius = 160 * dpr;
+        for (let i = 0; i < nodes.length; i += 1) {
+          const node = nodes[i];
+          const flow = field(node.x, node.y, t);
+          const dx = node.x - mouse.x;
+          const dy = node.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          const repulse = dist < radius ? ((radius - dist) / radius) * 0.35 : 0;
+
+          node.vx += flow.x * 0.6 - (dx / (dist + 1)) * repulse;
+          node.vy += flow.y * 0.6 - (dy / (dist + 1)) * repulse;
+          node.x += node.vx;
+          node.y += node.vy;
+          node.vx *= 0.97;
+          node.vy *= 0.97;
+          node.pulse += 0.02;
+
+          if (node.x < -20) node.x = w + 20;
+          if (node.x > w + 20) node.x = -20;
+          if (node.y < -20) node.y = h + 20;
+          if (node.y > h + 20) node.y = -20;
+        }
+
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = `rgba(${colors.primary},0.72)`;
+        ctx.beginPath();
+        for (const node of nodes) {
+          const size = 1.1 + Math.sin(node.pulse) * 0.8;
+          ctx.moveTo(node.x + size, node.y);
+          ctx.arc(node.x, node.y, size, 0, Math.PI * 2);
+        }
+        ctx.fill();
+
+        const limit = linkRadius * dpr;
+        const limitSq = limit * limit;
+        ctx.lineWidth = 1 * dpr;
+        for (let i = 0; i < nodes.length; i += 1) {
+          for (let j = i + 1; j < nodes.length; j += 1) {
+            const a = nodes[i];
+            const b = nodes[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq >= limitSq) continue;
+            const dist = Math.sqrt(distSq);
+            const strength = 1 - dist / limit;
+            if (strength <= 0.05) continue;
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(${colors.accent},${0.28 * strength + 0.06})`;
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+        ctx.font = `${14 * dpr}px ui-monospace, Menlo, Consolas, Monaco, monospace`;
+        ctx.fillStyle = `rgba(${colors.ink},0.14)`;
+        for (const eq of equations) {
+          const flow = field(eq.x, eq.y, t);
+          eq.vx += flow.x * eq.alpha * 0.55;
+          eq.vy += flow.y * eq.alpha * 0.55;
+          eq.x += eq.vx;
+          eq.y += eq.vy;
+          eq.vx *= 0.985;
+          eq.vy *= 0.985;
+
+          if (eq.x < -220) eq.x = w + 220;
+          if (eq.x > w + 220) eq.x = -220;
+          if (eq.y < -60) eq.y = h + 60;
+          if (eq.y > h + 60) eq.y = -60;
+
+          ctx.fillText(eq.text, eq.x, eq.y);
+        }
+
+        rafId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener("mousemove", (event) => {
+        mouse.x = event.clientX * dpr;
+        mouse.y = event.clientY * dpr;
+      });
+
+      window.addEventListener("mouseleave", () => {
+        mouse.x = -1e9;
+        mouse.y = -1e9;
+      });
+
+      window.addEventListener("resize", () => {
+        resize();
+        resetNodes();
+      });
+
+      const observer = new MutationObserver(() => {
+        colors = readColors();
+      });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+      resize();
+      resetNodes();
+      rafId = requestAnimationFrame(draw);
+
+      window.addEventListener("beforeunload", () => {
+        if (rafId) cancelAnimationFrame(rafId);
+        observer.disconnect();
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const storageKey = "site-theme";
+      const toggle = document.getElementById("theme-toggle");
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const saved = localStorage.getItem(storageKey);
+
+      if (saved === "light" || saved === "dark") {
+        root.setAttribute("data-theme", saved);
+      } else if (prefersDark) {
+        root.setAttribute("data-theme", "dark");
+      }
+
+      if (!toggle) return;
+
+      toggle.addEventListener("click", function () {
+        const current = root.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+        const next = current === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        localStorage.setItem(storageKey, next);
+      });
+    })();
+  </script>
+</body>
+
+</html>
