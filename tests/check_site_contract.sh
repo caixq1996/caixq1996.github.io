@@ -59,8 +59,13 @@ done
 
 require_contains "$build_dir/index.html" 'I was invited to serve as an Area Chair for ICLR 2027.'
 require_contains "$build_dir/index.html" 'I attended ICML 2026 in Seoul, South Korea.'
-require_contains "$build_dir/index.html" '<strong>Conference Reviewer:</strong>'
-require_contains "$build_dir/index.html" '<strong>Journal Reviewer:</strong>'
+require_contains "$build_dir/index.html" '<strong>Conference Reviewer:</strong> ICLR, NeurIPS, ICML, IJCAI, SDM, UAI, CCML, ECAI, CIKM'
+require_contains "$build_dir/index.html" 'href="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=5962385">IEEE Transactions on Neural Networks and Learning Systems (TNNLS)</a>'
+require_contains "$build_dir/index.html" 'href=https://link.springer.com/journal/10994>Machine Learning</a>'
+require_contains "$build_dir/index.html" 'href=https://www.jmlr.org/tmlr/>Transactions on Machine Learning Research (TMLR)</a>'
+if grep -Eq -- '<strong>Conference Reviewer:</strong>[^<]*[0-9]{4}' "$build_dir/index.html"; then
+  fail 'conference reviewer list still displays years'
+fi
 require_contains "$build_dir/index.html" 'href=./publications/index.html>Publications</a>'
 if grep -Fq -- 'href=./files/>files</a>' "$build_dir/index.html"; then
   fail 'homepage still links to the non-indexed files directory'
