@@ -37,6 +37,11 @@ jobs:
           hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
+      - name: Verify site contracts
+        run: |
+          bash tests/check_teaching_content.sh
+          bash tests/check_site_contract.sh
+
       - name: Build with Hugo
         run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 

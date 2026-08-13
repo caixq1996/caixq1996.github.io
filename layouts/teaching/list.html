@@ -10,9 +10,7 @@
   <meta name="description" content="Courses and invited teaching activities by {{ $siteTitle }}." />
   <link rel="icon" href="/icons/favicon.ico" sizes="16x16 32x32 48x48">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {{ partial "site_typography.html" . }}
 
   <style>
     :root {
@@ -77,7 +75,7 @@
         radial-gradient(circle at 15% 15%, rgba(21, 112, 184, 0.18), transparent 34%),
         radial-gradient(circle at 85% 10%, rgba(10, 79, 133, 0.16), transparent 30%),
         linear-gradient(to bottom, var(--bg-soft), var(--bg));
-      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      font-family: var(--site-font-family);
       line-height: 1.65;
       position: relative;
       overflow-x: hidden;
@@ -133,7 +131,7 @@
     }
 
     .brand {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       font-size: 0.86rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -146,7 +144,7 @@
       border-radius: 999px;
       padding: 0.4rem 0.7rem;
       font-size: 0.82rem;
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       color: var(--text);
       text-decoration: none;
       background: var(--chip);
@@ -360,7 +358,7 @@
         }
 
         ctx.globalCompositeOperation = "source-over";
-        ctx.font = `${14 * dpr}px ui-monospace, Menlo, Consolas, Monaco, monospace`;
+        ctx.font = `${14 * dpr}px "IBM Plex Sans", sans-serif`;
         ctx.fillStyle = `rgba(${colors.ink},0.14)`;
         for (const eq of equations) {
           const flow = field(eq.x, eq.y, t);

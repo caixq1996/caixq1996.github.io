@@ -45,6 +45,7 @@ Expected: FAIL for day-precision News dates, mixed font declarations, missing st
 **Files:**
 - Create: `layouts/partials/site_typography.html`
 - Create: `layouts/partials/extend_head.html`
+- Create: `static/css/site-font.css`
 - Modify: `layouts/index.html`
 - Modify: `layouts/teaching/list.html`
 - Modify: `layouts/honors/list.html`
@@ -52,7 +53,7 @@ Expected: FAIL for day-precision News dates, mixed font declarations, missing st
 
 **Step 1: Implement the shared font system**
 
-Import only IBM Plex Sans at weights 400, 500, 600, and 700. Define `--site-font-family` once and apply it to document text, controls, preformatted content, and code. Include the shared partial in all custom layouts and through PaperMod's `extend_head.html` hook.
+Import only IBM Plex Sans at weights 400, 500, 600, and 700. Define `--site-font-family` once in the shared public stylesheet and apply it to document text, controls, preformatted content, and code. Include that stylesheet through a shared partial in all custom layouts and through PaperMod's `extend_head.html` hook. Wrap the active static BibTeX pages with minimal HTML that loads the same stylesheet.
 
 Replace explicit mono-family declarations and canvas equation font strings with the shared font variable or IBM Plex Sans.
 

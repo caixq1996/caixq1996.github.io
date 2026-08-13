@@ -16,9 +16,7 @@
   <link rel="icon" href="./icons/favicon-32x32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="./icons/android-chrome-192x192.png" sizes="192x192">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  {{ partial "site_typography.html" . }}
 
   <style>
     :root {
@@ -82,7 +80,7 @@
       min-height: 100%;
       color: var(--text);
       background: var(--bg);
-      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      font-family: var(--site-font-family);
     }
 
     body {
@@ -144,7 +142,7 @@
     }
 
     .brand {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       font-size: 0.92rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -162,7 +160,7 @@
 
     .action-link,
     .theme-toggle {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       font-size: 0.78rem;
       border: 1px solid var(--line);
       background: var(--chip);
@@ -209,7 +207,7 @@
     }
 
     .terminal {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 0.7rem;
@@ -278,7 +276,7 @@
     }
 
     .kicker {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       color: var(--brand);
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -298,7 +296,7 @@
     }
 
     .chip {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       font-size: 0.72rem;
       border: 1px solid var(--line);
       background: var(--chip);
@@ -330,7 +328,7 @@
     }
 
     .news-list time {
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
       font-size: 0.74rem;
       color: var(--muted);
       margin-right: 0.35rem;
@@ -341,7 +339,7 @@
       color: var(--muted);
       font-size: 0.82rem;
       text-align: center;
-      font-family: "IBM Plex Mono", monospace;
+      font-family: var(--site-font-family);
     }
 
     @media (max-width: 960px) {
@@ -453,8 +451,8 @@
             <li><time>2026.08</time>🎉 I was invited to serve as an Area Chair for ICLR 2027.</li>
             <li><time>2026.07</time>✈️ I attended ICML 2026 in Seoul, South Korea.</li>
             <li><time>2026.05</time>🎉 One paper was accepted by ICML 2026.</li>
-            <li><time>2026.04.22</time>Lecture on "An Introduction to Reinforcement Learning" for the course "Special Lecture on Information Science IV" at Ochanomizu University.</li>
-            <li><time>2026.04.08</time>Lecture on "An Introduction to Reinforcement Learning" for the course "Special Topics in Mechano-Informatics II" at The University of Tokyo.</li>
+            <li><time>2026.04</time>Lecture on "An Introduction to Reinforcement Learning" for the course "Special Lecture on Information Science IV" at Ochanomizu University.</li>
+            <li><time>2026.04</time>Lecture on "An Introduction to Reinforcement Learning" for the course "Special Topics in Mechano-Informatics II" at The University of Tokyo.</li>
             <li><time>2026.04</time>🎉 My research proposal titled "Reinforcement Learning with Unreliable Verification" has been selected for funding by the JSPS Grant-in-Aid for Early-Career Scientists (KAKENHI 若手研究).</li>
             <li><time>2026.02</time><a href="https://arxiv.org/abs/2602.12579">VI-CuRL</a> released on arXiv.</li>
             <li><time>2026.01</time><a href="https://arxiv.org/abs/2601.20687">PU Reinforcement Learning Distillation</a> released on arXiv.</li>
@@ -476,7 +474,7 @@
         <section class="section" id="correspondence">
           <div class="kicker">Contact</div>
           <h3>Correspondence</h3>
-          <p class="meta">For research collaboration, please contact via email above. Full publication list and PDFs are available through <a class="inline-link" href="./files/">files</a> and <a class="inline-link" href="https://scholar.google.com/citations?hl=en&user=rtMUMooAAAAJ&view_op=list_works">Google Scholar</a>.</p>
+          <p class="meta">For research collaboration, please contact via email above. Full publication list and PDFs are available through <a class="inline-link" href="./publications/index.html">Publications</a> and <a class="inline-link" href="https://scholar.google.com/citations?hl=en&user=rtMUMooAAAAJ&view_op=list_works">Google Scholar</a>.</p>
         </section>
       </main>
     </div>
@@ -629,7 +627,7 @@
         }
 
         ctx.globalCompositeOperation = "source-over";
-        ctx.font = `${14 * dpr}px ui-monospace, Menlo, Consolas, Monaco, monospace`;
+        ctx.font = `${14 * dpr}px "IBM Plex Sans", sans-serif`;
         ctx.fillStyle = `rgba(${colors.ink},0.14)`;
         equations.forEach((eq) => {
           const f = flow(eq.x, eq.y, t);

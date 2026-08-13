@@ -1,0 +1,23 @@
+:root {
+  --site-font-family: "IBM Plex Sans", sans-serif;
+}
+
+html {
+  font-family: var(--site-font-family);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body,
+body *,
+button,
+input,
+select,
+textarea,
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--site-font-family) !important;
+}

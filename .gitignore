@@ -1,2 +1,12 @@
 .hugo_build.lock
 public/
+resources/_gen/
+
+# LaTeX build intermediates. Keep CV/en_caixq_cv.pdf tracked.
+CV/*.aux
+CV/*.fdb_latexmk
+CV/*.fls
+CV/*.log
+CV/*.out
+CV/*.synctex.gz
+CV/*.synctex.gz.sum.synctex

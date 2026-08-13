@@ -53,6 +53,7 @@ params:
     favicon16x16: "/icons/favicon-32x32.png"
     favicon32x32: "/icons/favicon-32x32.png"
     apple_touch_icon: "/icons/android-chrome-192x192.png"
+    safari_pinned_tab: "/icons/favicon.svg"
 
 menu:
   main:
@@ -64,9 +65,9 @@ menu:
       name: Posts
       url: /posts/
       weight: 20
-    - identifier: files
-      name: Files
-      url: /files/
+    - identifier: cv
+      name: CV
+      url: "https://caixq1996.github.io/CV/en_caixq_cv.pdf"
       weight: 30
 
 markup:
@@ -78,13 +79,5 @@ module:
   mounts:
     - source: static
       target: static
-    - source: files
-      target: static/files
-    - source: images
-      target: static/images
-    - source: icons
-      target: static/icons
-    - source: CV
-      target: static/CV
-    - source: bib
-      target: static/bib
+    - source: CV/en_caixq_cv.pdf
+      target: static/CV/en_caixq_cv.pdf
