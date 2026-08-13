@@ -29,7 +29,7 @@ require_absent() {
 require_contains() {
   local path="$1"
   local needle="$2"
-  if ! rg -F --quiet -- "$needle" "$path"; then
+  if ! grep -Fq -- "$needle" "$path"; then
     fail "missing text in ${path#$repo_root/}: $needle"
   fi
 }
@@ -62,7 +62,7 @@ require_contains "$build_dir/index.html" 'I attended ICML 2026 in Seoul, South K
 require_contains "$build_dir/index.html" '<strong>Conference Reviewer:</strong>'
 require_contains "$build_dir/index.html" '<strong>Journal Reviewer:</strong>'
 require_contains "$build_dir/index.html" 'href=./publications/index.html>Publications</a>'
-if rg -F --quiet -- 'href=./files/>files</a>' "$build_dir/index.html"; then
+if grep -Fq -- 'href=./files/>files</a>' "$build_dir/index.html"; then
   fail 'homepage still links to the non-indexed files directory'
 fi
 require_contains "$build_dir/teaching/index.html" 'Special Topics in Mechano-Informatics II'
@@ -70,7 +70,7 @@ require_contains "$build_dir/publications/index.html" 'Aug. 16-19, 2025'
 require_contains "$build_dir/posts/index.html" '<span>CV</span>'
 require_contains "$build_dir/posts/index.html" 'href=https://caixq1996.github.io/CV/en_caixq_cv.pdf'
 require_contains "$build_dir/posts/index.html" 'href=https://caixq1996.github.io/icons/favicon.svg'
-if rg -F --quiet -- 'caixq1996.github.io/files/' "$build_dir/posts/index.html"; then
+if grep -Fq -- 'caixq1996.github.io/files/' "$build_dir/posts/index.html"; then
   fail 'PaperMod navigation still links to the non-indexed files directory'
 fi
 
@@ -78,23 +78,23 @@ while IFS= read -r time_value; do
   if [[ ! "$time_value" =~ ^[0-9]{4}\.[0-9]{2}$ ]]; then
     fail "homepage time is not month precision: $time_value"
   fi
-done < <(rg -o '<time>[^<]+</time>' "$build_dir/index.html" | sed -E 's#</?time>##g')
+done < <(grep -oE -- '<time>[^<]+</time>' "$build_dir/index.html" | sed -E 's#</?time>##g')
 
 require_file "$repo_root/layouts/partials/site_typography.html"
 require_file "$repo_root/layouts/partials/extend_head.html"
 require_file "$build_dir/css/site-font.css"
 require_contains "$build_dir/css/site-font.css" '--site-font-family: "IBM Plex Sans", sans-serif'
 
-if rg -n --glob '*.html' 'IBM\+Plex\+Mono|IBM Plex Mono|ui-monospace|Menlo|Consolas|Monaco|font-family:[^;]*monospace' "$repo_root/layouts" >/tmp/caixq-site-contract-fonts.log; then
+if grep -RInE --include='*.html' -- 'IBM\+Plex\+Mono|IBM Plex Mono|ui-monospace|Menlo|Consolas|Monaco|font-family:[^;]*monospace' "$repo_root/layouts" >/tmp/caixq-site-contract-fonts.log; then
   sed -n '1,160p' /tmp/caixq-site-contract-fonts.log >&2
   fail 'active layouts still declare an alternate mono font'
 fi
 
 while IFS= read -r html_file; do
-  if rg -F --quiet -- 'http-equiv=refresh' "$html_file"; then
+  if grep -Fq -- 'http-equiv=refresh' "$html_file"; then
     continue
   fi
-  if ! rg -F --quiet -- '/css/site-font.css' "$html_file"; then
+  if ! grep -Fq -- '/css/site-font.css' "$html_file"; then
     fail "generated page lacks shared typography: ${html_file#$build_dir/}"
   fi
 done < <(find "$build_dir" -type f -name '*.html' | sort)

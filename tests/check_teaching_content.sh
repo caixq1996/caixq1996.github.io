@@ -14,7 +14,7 @@ require_file() {
 require_contains() {
   local path="$1"
   local needle="$2"
-  if ! rg -F --quiet -- "$needle" "$path"; then
+  if ! grep -Fq -- "$needle" "$path"; then
     echo "Missing text in $path: $needle" >&2
     exit 1
   fi
@@ -23,7 +23,7 @@ require_contains() {
 require_absent() {
   local path="$1"
   local needle="$2"
-  if rg -F --quiet -- "$needle" "$path"; then
+  if grep -Fq -- "$needle" "$path"; then
     echo "Unexpected text in $path: $needle" >&2
     exit 1
   fi
