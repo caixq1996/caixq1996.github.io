@@ -2,7 +2,7 @@ PWD /home/caixq/project/caixq1996.github.io/CV
 INPUT /home/caixq/.TinyTeX/texmf.cnf
 INPUT /home/caixq/.TinyTeX/texmf-dist/web2c/texmf.cnf
 INPUT /home/caixq/.TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /home/caixq/project/caixq1996.github.io/CV/en_caixq_cv.tex
+INPUT en_caixq_cv.tex
 OUTPUT en_caixq_cv.log
 INPUT /home/caixq/.TinyTeX/texmf-dist/tex/latex/base/article.cls
 INPUT /home/caixq/.TinyTeX/texmf-dist/tex/latex/base/article.cls
