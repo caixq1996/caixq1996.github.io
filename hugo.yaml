@@ -40,8 +40,6 @@ params:
     imageWidth: 160
     imageHeight: 160
     buttons:
-      - name: CV
-        url: "/CV/en_caixq_cv.pdf"
       - name: Publications
         url: "/#publications"
       - name: Google Scholar
@@ -65,10 +63,6 @@ menu:
       name: Posts
       url: /posts/
       weight: 20
-    - identifier: cv
-      name: CV
-      url: "https://caixq1996.github.io/CV/en_caixq_cv.pdf"
-      weight: 30
 
 markup:
   goldmark:
@@ -79,5 +73,3 @@ module:
   mounts:
     - source: static
       target: static
-    - source: CV/en_caixq_cv.pdf
-      target: static/CV/en_caixq_cv.pdf

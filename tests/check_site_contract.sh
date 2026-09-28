@@ -49,7 +49,6 @@ for output in \
   teaching/index.html \
   honors/index.html \
   publications/index.html \
-  CV/en_caixq_cv.pdf \
   files/VPIL-neurips23.pdf \
   bib/2023-NeurIPS-VPIL.html \
   images/caixq.JPG \
@@ -72,8 +71,6 @@ if grep -Fq -- 'href=./files/>files</a>' "$build_dir/index.html"; then
 fi
 require_contains "$build_dir/teaching/index.html" 'Special Topics in Mechano-Informatics II'
 require_contains "$build_dir/publications/index.html" 'Aug. 16-19, 2025'
-require_contains "$build_dir/posts/index.html" '<span>CV</span>'
-require_contains "$build_dir/posts/index.html" 'href=https://caixq1996.github.io/CV/en_caixq_cv.pdf'
 require_contains "$build_dir/posts/index.html" 'href=https://caixq1996.github.io/icons/favicon.svg'
 if grep -Fq -- 'caixq1996.github.io/files/' "$build_dir/posts/index.html"; then
   fail 'PaperMod navigation still links to the non-indexed files directory'
@@ -116,12 +113,10 @@ require_contains "$repo_root/.github/workflows/hugo-pages.yml" 'bash tests/check
 require_contains "$repo_root/.github/workflows/hugo-pages.yml" 'bash tests/check_site_contract.sh'
 require_file "$repo_root/archive/README.md"
 require_file "$repo_root/archive/legacy-site/README.md"
-require_file "$repo_root/archive/cv-build/README.md"
 require_file "$repo_root/archive/legacy-site/generated/index.html"
 require_file "$repo_root/archive/legacy-site/snapshots/index_pre.html"
 require_file "$repo_root/archive/legacy-site/design-iterations/index_gemini_v6.html"
 require_file "$repo_root/archive/legacy-site/generated/teaching/index.html"
-require_file "$repo_root/archive/cv-build/artifacts/en_caixq_cv.log"
 
 for legacy_path in \
   index.html \
@@ -142,13 +137,14 @@ if [[ -e "$build_dir/archive" ]]; then
   fail 'archive directory leaked into deployed site'
 fi
 
-cv_public_files=$(find "$build_dir/CV" -type f | wc -l)
-if [[ "$cv_public_files" -ne 1 ]]; then
-  fail "deployed CV directory contains $cv_public_files files instead of only the PDF"
-fi
+for cv_path in "$repo_root/CV" "$repo_root/archive/cv-build" "$build_dir/CV"; do
+  if [[ -e "$cv_path" ]]; then
+    fail "removed CV directory still exists: $cv_path"
+  fi
+done
 
-if ! git -C "$repo_root" check-ignore --quiet --no-index CV/probe.aux; then
-  fail 'CV auxiliary files are not ignored'
+if grep -RInE --include='*.html' -- '/CV/|en_caixq_cv|>CV<' "$build_dir"; then
+  fail 'generated site still contains CV links or buttons'
 fi
 
 if ((failures > 0)); then

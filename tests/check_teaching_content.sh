@@ -44,6 +44,3 @@ require_absent "$repo_root/layouts/index.html" '2026.04.22'
 
 require_contains "$repo_root/layouts/partials/teaching_full.html" '2026 S1S2 (Graduate): Special Topics in Mechano-Informatics II at The University of Tokyo'
 require_contains "$repo_root/layouts/partials/teaching_full.html" '2026 Spring (Undergraduate/Graduate): Special Lecture on Information Science IV at Ochanomizu University'
-
-require_contains "$repo_root/CV/en_caixq_cv.tex" 'Special Topics in Mechano-Informatics II'
-require_contains "$repo_root/CV/en_caixq_cv.tex" 'Special Lecture on Information Science IV'

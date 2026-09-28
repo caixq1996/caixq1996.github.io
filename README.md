@@ -14,7 +14,6 @@ This repository is a Hugo site deployed to GitHub Pages. Hugo templates and cont
 │   ├── files/
 │   ├── icons/
 │   └── images/
-├── CV/            # CV source plus the published PDF
 ├── tests/         # Build and content contract checks
 ├── docs/plans/    # Current implementation records
 ├── archive/       # Recoverable history; excluded from deployment
@@ -30,11 +29,11 @@ bash tests/check_teaching_content.sh
 bash tests/check_site_contract.sh
 ```
 
-GitHub Actions currently builds with Hugo 0.146.0. To rebuild the CV, run `latexmk -pdf en_caixq_cv.tex` inside `CV/`; Hugo publishes only `CV/en_caixq_cv.pdf`.
+GitHub Actions currently builds with Hugo 0.146.0.
 
 ## Presentation policies
 
 - Homepage timeline dates use `YYYY.MM` month precision.
-- Formal publication schedules, CV dates, and content front matter retain their original precision.
+- Formal publication schedules and content front matter retain their original precision.
 - IBM Plex Sans is the single site-wide font, including navigation, labels, code-like elements, and canvas equations.
 - Files under `archive/` are retained for reference and are not part of the deployed site.

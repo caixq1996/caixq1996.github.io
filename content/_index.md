@@ -14,6 +14,5 @@ description: "Xin-Qiang Cai personal homepage powered by Hugo PaperMod."
 
 ## Quick Links
 
-- CV: [/CV/en_caixq_cv.pdf](/CV/en_caixq_cv.pdf)
 - Google Scholar: [JJDqODIAAAAJ](https://scholar.google.com/citations?user=JJDqODIAAAAJ)
 - GitHub: [caixq1996](https://github.com/caixq1996)
