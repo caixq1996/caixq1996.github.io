@@ -1,6 +1,6 @@
 /* Controls only the Hongo calculator. The academic site remains outside this worker's scope. */
 'use strict';
-const CACHE='hongo-nutrition-pwa-v4.1-20261009';
+const CACHE='hongo-nutrition-pwa-v4.1-menu-20261019';
 const IMAGES='hongo-nutrition-images-v4';
 const FILES=['./','./index.html','./app.js','./data.json','./upgrade.js','./contributions.js','./photos.json','./manifest.webmanifest','./icon-192.png','./icon-512.png','/css/site-font.css'];
 const URLS=FILES.map(p=>new URL(p,self.registration.scope).href);
