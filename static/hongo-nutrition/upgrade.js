@@ -57,7 +57,7 @@ try{
  new MutationObserver(decorateCatalog).observe($('catalog'),{childList:true});new MutationObserver(decorateFilters).observe($('filters'),{childList:true});
  new MutationObserver(schedule).observe($('bottomKcal'),{childList:true,characterData:true,subtree:true});new MutationObserver(schedule).observe($('bottomProtein'),{childList:true,characterData:true,subtree:true});new MutationObserver(markVersion).observe($('runtime'),{childList:true,characterData:true,subtree:true});
  $('filters').querySelector('[data-category="全部"]').click();decorateFilters();decorateCatalog();renderGoals();markVersion();
- $('settingsView').querySelector('.section-heading p').textContent='原始记录 2026-10-09 · 增补 2026-10-19 · 应用 v4.1';
+ $('settingsView').querySelector('.section-heading p').textContent='原始记录 2026-10-09 · 增补 2026-10-26 · 应用 v4.1';
  window.HongoNutrition={version:'4.0',targets,nutrients,profile:()=>JSON.parse(JSON.stringify(profile)),photos:()=>photos,report:textReport};
 }catch(e){console.error('Nutrition extension:',e);const el=document.createElement('p');el.className='warning-text';el.textContent='图片与营养建议模块暂未加载：'+e.message+'。基础点菜仍可使用，请联网后重新载入。';$('app')?.prepend(el)}
 })();
